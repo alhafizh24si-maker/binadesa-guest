@@ -10,7 +10,7 @@ class WelcomeController extends Controller
     {
         // Passing data sederhana ke view welcome
         $data = [
-            'title' => 'Welcome to Profil Desa',
+            'title' => 'Welcome to Profil',
             'subtitle' => 'Sistem Informasi Desa Digital',
             'features' => [
                 'Profil Desa Lengkap',
@@ -27,19 +27,19 @@ class WelcomeController extends Controller
 
     public function profil()
     {
-        // Data profil statis (tanpa database)
         $profil = [
-            'nama_desa' => 'Desa Mekar Jaya',
+            'nama_desa' => 'Binadesa',
             'kecamatan' => 'Rumbai',
             'kabupaten' => 'Pekanbaru',
             'provinsi' => 'Riau',
-            'alamat_kantor' => 'Jl. Desa Mekar Jaya No. 123',
-            'email' => 'desamekarjaya@example.com',
+            'alamat_kantor' => 'Jl. Binadesa No. 123',
+            'email' => 'Binadesa@example.com',
             'telepon' => '0761-123456',
             'visi' => 'Terwujudnya Desa Mekar Jaya yang Maju, Mandiri, dan Sejahtera',
-            'misi' => '1. Meningkatkan pelayanan publik
-2. Mengembangkan potensi desa
-3. Memperkuat gotong royong'
+            'misi' =>
+            '1. Meningkatkan pelayanan publik
+             2. Mengembangkan potensi desa
+             3. Memperkuat gotong royong'
         ];
         return view('profil', compact('profil'));
     }
