@@ -23,12 +23,14 @@ Route::prefix('kategoriberita')->name('kategoriberita.')->group(function () {
     Route::get('/{id}/edit', [KategoriberitaController::class, 'edit'])->name('edit');
     Route::put('/{id}', [KategoriberitaController::class, 'update'])->name('update');
     Route::delete('/{id}', [KategoriberitaController::class, 'destroy'])->name('destroy');
+});
 
-    // Route untnuk warga
-    Route::get('/warga', [WargaController::class, 'index'])->name('warga.index');
-    Route::get('/warga/create', [WargaController::class, 'create'])->name('warga.create');
-    Route::post('/warga', [WargaController::class, 'store'])->name('warga.store');
-    Route::get('/warga/{id}/edit', [WargaController::class, 'edit'])->name('warga.edit');
-    Route::put('/warga/{id}', [WargaController::class, 'update'])->name('warga.update');
-    Route::delete('/warga/{id}', [WargaController::class, 'destroy'])->name('warga.destroy');
+// Route untuk Warga - DIPINDAHKAN KE LUAR GRUP KATEGORIBERITA
+Route::prefix('warga')->name('warga.')->group(function () {
+    Route::get('/', [WargaController::class, 'index'])->name('index');
+    Route::get('/create', [WargaController::class, 'create'])->name('create');
+    Route::post('/', [WargaController::class, 'store'])->name('store');
+    Route::get('/{id}/edit', [WargaController::class, 'edit'])->name('edit');
+    Route::put('/{id}', [WargaController::class, 'update'])->name('update');
+    Route::delete('/{id}', [WargaController::class, 'destroy'])->name('destroy');
 });

@@ -1,63 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Data Kategori Berita - Binadesa</title>
-
-    <!-- ======= Google Font =======-->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet">
-    <!-- End Google Font-->
-
-    <!-- ======= Styles =======-->
-    <link href="{{ asset('assets-guest/vendors/bootstrap/bootstrap.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('assets-guest/vendors/bootstrap-icons/font/bootstrap-icons.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('assets-guest/vendors/glightbox/glightbox.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('assets-guest/vendors/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('assets-guest/vendors/aos/aos.css') }}" rel="stylesheet">
-    <!-- End Styles-->
-
-    <!-- ======= Theme Style =======-->
-    <link href="{{ asset('assets-guest/css/style.css') }}" rel="stylesheet">
-    <!-- End Theme Style-->
-
-    <!-- ======= Apply theme =======-->
-    <script>
-      (function() {
-      const storedTheme = localStorage.getItem('theme') || 'light';
-      document.documentElement.setAttribute('data-bs-theme', storedTheme);
-      })();
-    </script>
-  </head>
-  <body>
-
-    <!-- ======= Site Wrap =======-->
-    <div class="site-wrap">
-
-      <!-- ======= Header =======-->
-      <header class="fbs__net-navbar navbar navbar-expand-lg dark" aria-label="freebootstrap.net navbar">
-        <div class="container d-flex align-items-center justify-content-between">
-          <!-- Start Logo-->
-          <a class="navbar-brand w-auto" href="{{ url('/') }}">
-            <img class="logo dark img-fluid" src="{{ asset('assets-guest/images/logo-dark.svg') }}" alt="Binadesa">
-            <img class="logo light img-fluid" src="{{ asset('assets-guest/images/logo-light.svg') }}" alt="Binadesa">
-          </a>
-          <!-- End Logo-->
-
-          <!-- Navigation -->
-          <div class="ms-auto w-auto">
-            <div class="header-social d-flex align-items-center gap-1">
-              <a class="btn btn-primary py-2" href="{{ route('kategoriberita.create') }}">
-                <i class="bi bi-plus-circle me-2"></i>Tambah Kategori
-              </a>
-            </div>
-          </div>
-        </div>
-      </header>
-      <!-- End Header-->
-
+@extends('layouts.guest.app')
+  @extends('layouts.guest.app')
+@section('content')
       <!-- ======= Main =======-->
       <main>
 
@@ -90,6 +33,14 @@
                 <div class="card-wrapper" data-aos="fade-up" data-aos-delay="300">
                   <!-- Table Container -->
                   <div class="p-4 rounded-4" style="background: var(--bs-body-bg); border: 1px solid var(--bs-border-color);">
+
+                    <!-- Add Button Section -->
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                      <h5 class="mb-0">Daftar Kategori Berita</h5>
+                      <a href="{{ route('kategoriberita.create') }}" class="btn btn-primary">
+                        <i class="bi bi-plus-circle me-2"></i>Tambah Kategori Berita
+                      </a>
+                    </div>
 
                     @if($kategoriBerita && $kategoriBerita->count() > 0)
                     <div class="table-responsive">
@@ -176,8 +127,7 @@
                       <h4 class="text-muted mb-3">Belum ada data kategori berita</h4>
                       <p class="text-muted mb-4">Mulai dengan menambahkan kategori berita pertama Anda.</p>
                       <a href="{{ route('kategoriberita.create') }}" class="btn btn-primary">
-                        <i class="bi bi-plus-circle me-2"></i>Tambah Kategori Pertama
-                      </a>
+                        <i class="bi bi-plus-circle me-2"></i>Tambah Kategori Pertama</a>
                     </div>
                     @endif
 
@@ -190,40 +140,5 @@
         <!-- End Data Section-->
 
       </main>
-
-      <!-- ======= Footer =======-->
-      <footer class="footer pt-5 pb-5">
-        <div class="container">
-          <div class="row credits pt-3">
-            <div class="col-xl-12 text-center">
-              &copy;
-              <script>document.write(new Date().getFullYear());</script> Binadesa.
-              All rights reserved. Designed with <i class="bi bi-heart-fill text-danger"></i> by <a href="https://freebootstrap.net">FreeBootstrap.net</a>
-            </div>
-          </div>
-        </div>
-      </footer>
-      <!-- End Footer-->
-
-    </div>
-
-    <!-- ======= Back to Top =======-->
-    <button id="back-to-top"><i class="bi bi-arrow-up-short"></i></button>
-    <!-- End Back to top-->
-
-    <!-- ======= Javascripts =======-->
-    <script src="{{ asset('assets-guest/vendors/bootstrap/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ asset('assets-guest/vendors/aos/aos.js') }}"></script>
-    <script src="{{ asset('assets-guest/js/custom.js') }}"></script>
-
-    <script>
-      // Initialize tooltips
-      document.addEventListener('DOMContentLoaded', function() {
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-          return new bootstrap.Tooltip(tooltipTriggerEl)
-        });
-      });
-    </script>
-  </body>
-</html>
+      <!-- ======= End Main =======-->
+@endsection
