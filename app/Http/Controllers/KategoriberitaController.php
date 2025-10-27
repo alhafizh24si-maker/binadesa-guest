@@ -11,12 +11,21 @@ class KategoriberitaController extends Controller
     public function index()
     {
         $kategoriBerita = Kategoriberita::orderBy('created_at', 'desc')->paginate(10);
-        return view('guest.kategoriberita.index', compact('kategoriBerita'));
+        $data = [
+            'title' => 'Kategori Berita',
+            'kategoriBerita' => $kategoriBerita
+        ];
+
+        return view('guest.kategoriberita.index', $data);
     }
 
     public function create()
     {
-        return view('guest.kategoriberita.create');
+        $data = [
+            'title' => 'Tambah Kategori Berita'
+        ];
+
+        return view('guest.kategoriberita.create', $data);
     }
 
     public function store(Request $request)
@@ -26,25 +35,46 @@ class KategoriberitaController extends Controller
             'deskripsi' => 'nullable|string'
         ]);
 
+        // Generate slug dari name
+        $validated['slug'] = Str::slug($validated['name']);
+
         Kategoriberita::create($validated);
 
         return redirect()->route('kategoriberita.index')
                         ->with('success', 'Kategori berita berhasil ditambahkan!');
     }
 
+    public function show($id)
+    {
+        $kategori = Kategoriberita::findOrFail($id);
+        $data = [
+            'title' => 'Detail Kategori Berita',
+            'kategori' => $kategori
+        ];
+
+        return view('guest.kategoriberita.show', $data);
+    }
+
     public function edit($id)
     {
         $kategori = Kategoriberita::findOrFail($id);
-        return view('guest.kategoriberita.edit', compact('kategori'));
+        $data = [
+            'title' => 'Edit Kategori Berita',
+            'kategori' => $kategori
+        ];
+
+        return view('guest.kategoriberita.edit', $data);
     }
 
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
             'name' => 'required|string|max:100',
-            'slug' => 'required|string|max:120|unique:kategoriberita,slug,' . $id . ',kategori_id',
             'deskripsi' => 'nullable|string'
         ]);
+
+        // Generate slug dari name
+        $validated['slug'] = Str::slug($validated['name']);
 
         $kategori = Kategoriberita::findOrFail($id);
         $kategori->update($validated);

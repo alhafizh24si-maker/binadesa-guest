@@ -1,5 +1,4 @@
 @extends('layouts.guest.app')
-  @extends('layouts.guest.app')
 @section('content')
       <!-- ======= Main =======-->
       <main>

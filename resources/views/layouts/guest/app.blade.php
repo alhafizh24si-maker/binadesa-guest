@@ -17,18 +17,16 @@
     @include('layouts.guest.css')
     <!-- End Theme Style-->
 
-    <!-- ======= Apply theme =======-->
-    @include('layouts.guest.apllytheme')
-    <!-- ======= End Apply theme =======-->
-  </head>
-  <body>
-
     <!-- ======= Site Wrap =======-->
     <div class="site-wrap">
 
       <!-- ======= Header =======-->
       @include('layouts.guest.header')
       <!-- End Header-->
+
+      <!-- Improved Navbar -->
+      @include('layouts.guest.navbar')
+      <!-- End Improved Navbar -->
 
       <!-- ======= Main =======-->
         @yield('content')
