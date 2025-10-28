@@ -16,8 +16,7 @@
                 <div class="container">
                     <div class="row mb-5">
                         <div class="col-md-8 mx-auto text-center">
-                            <span class="subtitle text-uppercase mb-3" data-aos="fade-up" data-aos-delay="0">Admin
-                                Panel</span>
+                            <span class="subtitle text-uppercase mb-3" data-aos="fade-up" data-aos-delay="0"></span>
                             <h2 class="mb-3" data-aos="fade-up" data-aos-delay="100">Tambah Kategori Berita</h2>
                             <p data-aos="fade-up" data-aos-delay="200">Form untuk menambahkan kategori berita baru ke dalam
                                 sistem.</p>

@@ -21,7 +21,7 @@
     <!-- ======= Apply theme =======-->
     @include('layouts.guest.apllytheme')
     <!-- ======= End Apply theme =======-->
-    
+
     <!-- ======= Login CSS =======-->
     @include('layouts.guest.logincss')
     <!-- End Login CSS-->
@@ -142,11 +142,11 @@
                                 </div>
 
                                 <div class="social-login">
-                                    <a href="#" class="social-btn">
+                                    <a href="https://accounts.google.com/v3/signin/identifier?hl=id&ifkv=ATuJsjxtOBeZDuRmB7aXp-t7SKJXmJLQ0gwLtISqhsxIyjcD8f26SWZ9gxRQXTnexAOh2jbXHugR&flowName=GlifWebSignIn&flowEntry=ServiceLogin&dsh=S1628295783%3A1709606966038322&theme=mn" class="social-btn">
                                         <i class="bi bi-google"></i>
                                         <span>Google</span>
                                     </a>
-                                    <a href="#" class="social-btn">
+                                    <a href="https://www.facebook.com/?locale=id_ID" class="social-btn">
                                         <i class="bi bi-facebook"></i>
                                         <span>Facebook</span>
 
@@ -166,29 +166,9 @@
     </div>
 
     <!-- ======= Javascripts =======-->
-    <script src="{{ asset('assets-guest/vendors/bootstrap/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ asset('assets-guest/vendors/gsap/gsap.min.js') }}"></script>
-    <script src="{{ asset('assets-guest/vendors/imagesloaded/imagesloaded.pkgd.min.js') }}"></script>
-    <script src="{{ asset('assets-guest/vendors/isotope/isotope.pkgd.min.js') }}"></script>
-    <script src="{{ asset('assets-guest/vendors/glightbox/glightbox.min.js') }}"></script>
-    <script src="{{ asset('assets-guest/vendors/swiper/swiper-bundle.min.js') }}"></script>
-    <script src="{{ asset('assets-guest/vendors/aos/aos.js') }}"></script>
-    <script src="{{ asset('assets-guest/vendors/purecounter/purecounter.js') }}"></script>
-    <script src="{{ asset('assets-guest/js/custom.js') }}"></script>
+    @include('layouts.guest.javascripts')
     <!-- End JavaScripts-->
 
-    <script>
-        // Initialize AOS jika diperlukan
-        document.addEventListener('DOMContentLoaded', function() {
-            if (typeof AOS !== 'undefined') {
-                AOS.init({
-                    duration: 800,
-                    easing: 'ease-in-out',
-                    once: true
-                });
-            }
-        });
-    </script>
-</body>
-
-</html>
+    <!-- ======= login scripts =======-->
+    @include('layouts.guest.loginscripts')
+<!-- ======= end login scripts =======-->

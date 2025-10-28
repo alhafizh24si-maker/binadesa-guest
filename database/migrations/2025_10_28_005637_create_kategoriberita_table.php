@@ -1,18 +1,19 @@
 <?php
 
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class CreateKategoriBeritaTable extends Migration
 {
     public function up()
     {
         Schema::create('kategoriberita', function (Blueprint $table) {
-            $table->id('kategori_id');
+            $table->id();
             $table->string('name');
+            $table->text('deskripsi');
             $table->string('slug')->unique();
-            $table->text('deskripsi')->nullable();
             $table->timestamps();
         });
     }
@@ -21,4 +22,5 @@ return new class extends Migration
     {
         Schema::dropIfExists('kategoriberita');
     }
-};
+}
+

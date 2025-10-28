@@ -17,7 +17,7 @@ class AuthController extends Controller
             return redirect()->route('dashboard');
         }
 
-        return view('guest.login');
+        return view('pages.auth.login');
     }
 
     // Proses login
@@ -55,7 +55,7 @@ class AuthController extends Controller
             return redirect()->route('dashboard');
         }
 
-        return view('guest.register');
+        return view('pages.auth.register');
     }
 
     // Proses register

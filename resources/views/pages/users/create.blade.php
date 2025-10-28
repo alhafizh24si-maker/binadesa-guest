@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Edit User - Binadesa</title>
+    <title>Tambah User - Binadesa</title>
 
 @extends('layouts.guest.app')
 @section('content')
@@ -17,16 +17,15 @@
             <div class="row mb-5">
               <div class="col-md-8 mx-auto text-center">
                 <span class="subtitle text-uppercase mb-3" data-aos="fade-up" data-aos-delay="0">Admin Panel</span>
-                <h2 class="mb-3" data-aos="fade-up" data-aos-delay="100">Edit User</h2>
-                <p data-aos="fade-up" data-aos-delay="200">Form untuk mengedit data user dalam sistem.</p>
+                <h2 class="mb-3" data-aos="fade-up" data-aos-delay="100">Tambah User</h2>
+                <p data-aos="fade-up" data-aos-delay="200">Form untuk menambahkan data user baru ke dalam sistem.</p>
               </div>
             </div>
 
             <div class="row justify-content-center">
               <div class="col-lg-8">
                 <div class="form-wrapper" data-aos="fade-up" data-aos-delay="300">
-                  <form action="{{ route('user.update', $dataUser->id) }}" method="POST" class="p-5 rounded-4" style="background: var(--bs-body-bg); border: 1px solid var(--bs-border-color);">
-                    @method('PUT')
+                  <form action="{{ route('user.store') }}" method="POST" class="p-5 rounded-4" style="background: var(--bs-body-bg); border: 1px solid var(--bs-border-color);">
                     @csrf
 
                     <div class="row gap-3 mb-4">
@@ -36,7 +35,7 @@
                                id="name"
                                type="text"
                                name="name"
-                               value="{{ old('name', $dataUser->name) }}"
+                               value="{{ old('name') }}"
                                placeholder="Masukkan nama lengkap"
                                maxlength="100"
                                required>
@@ -53,7 +52,7 @@
                                id="email"
                                type="email"
                                name="email"
-                               value="{{ old('email', $dataUser->email) }}"
+                               value="{{ old('email') }}"
                                placeholder="Masukkan alamat email"
                                maxlength="100"
                                required>
@@ -65,24 +64,25 @@
 
                     <div class="row gap-3 mb-4">
                       <div class="col-md-6">
-                        <label class="mb-2 fw-bold" for="password">Password</label>
+                        <label class="mb-2 fw-bold" for="password">Password <span class="text-danger">*</span></label>
                         <input class="form-control @error('password') is-invalid @enderror"
                                id="password"
                                type="password"
                                name="password"
-                               placeholder="Kosongkan jika tidak ingin mengubah">
-                        <small class="text-muted">Biarkan kosong jika tidak ingin mengubah password</small>
+                               placeholder="Masukkan password"
+                               required>
                         @error('password')
                           <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                       </div>
                       <div class="col-md-6">
-                        <label class="mb-2 fw-bold" for="password_confirmation">Konfirmasi Password</label>
+                        <label class="mb-2 fw-bold" for="password_confirmation">Konfirmasi Password <span class="text-danger">*</span></label>
                         <input class="form-control @error('password_confirmation') is-invalid @enderror"
                                id="password_confirmation"
                                type="password"
                                name="password_confirmation"
-                               placeholder="Konfirmasi password">
+                               placeholder="Konfirmasi password"
+                               required>
                         @error('password_confirmation')
                           <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -93,7 +93,7 @@
                       <div class="col-md-12">
                         <div class="d-flex gap-3">
                           <button class="btn btn-primary fw-semibold" type="submit">
-                            <i class="bi bi-save me-2"></i>Simpan Perubahan
+                            <i class="bi bi-save me-2"></i>Simpan Data
                           </button>
                           <a href="{{ route('user.index') }}" class="btn btn-outline-secondary">
                             <i class="bi bi-arrow-left me-2"></i>Kembali
@@ -110,5 +110,4 @@
         <!-- End Form Section-->
 
       </main>
-
-     @endsection
+@endsection

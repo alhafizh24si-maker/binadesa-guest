@@ -16,7 +16,7 @@ class KategoriberitaController extends Controller
             'kategoriBerita' => $kategoriBerita
         ];
 
-        return view('guest.kategoriberita.index', $data);
+        return view('pages.kategoriberita.index', $data);
     }
 
     public function create()
@@ -25,7 +25,7 @@ class KategoriberitaController extends Controller
             'title' => 'Tambah Kategori Berita'
         ];
 
-        return view('guest.kategoriberita.create', $data);
+        return view('pages.kategoriberita.create', $data);
     }
 
     public function store(Request $request)
@@ -52,7 +52,7 @@ class KategoriberitaController extends Controller
             'kategori' => $kategori
         ];
 
-        return view('guest.kategoriberita.show', $data);
+        return view('pages.kategoriberita.show', $data);
     }
 
     public function edit($id)
@@ -63,7 +63,7 @@ class KategoriberitaController extends Controller
             'kategori' => $kategori
         ];
 
-        return view('guest.kategoriberita.edit', $data);
+        return view('pages.kategoriberita.edit', $data);
     }
 
     public function update(Request $request, $id)
