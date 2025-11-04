@@ -2,9 +2,9 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\WargaController;
 use App\Http\Controllers\KategoriberitaController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\WargaController;
 use Illuminate\Support\Facades\Route;
 
 // Route untuk guest (belum login)
@@ -36,14 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/warga/{id}', [WargaController::class, 'update'])->name('warga.update');
     Route::delete('/warga/{id}', [WargaController::class, 'destroy'])->name('warga.destroy');
 
-    // Kategori Berita - Sesuai dengan controller yang ada
-    Route::get('/kategoriberita', [KategoriberitaController::class, 'index'])->name('kategoriberita.index');
-    Route::get('/kategoriberita/create', [KategoriberitaController::class, 'create'])->name('kategoriberita.create');
-    Route::post('/kategoriberita', [KategoriberitaController::class, 'store'])->name('kategoriberita.store');
-    Route::get('/kategoriberita/{id}', [KategoriberitaController::class, 'show'])->name('kategoriberita.show');
-    Route::get('/kategoriberita/{id}/edit', [KategoriberitaController::class, 'edit'])->name('kategoriberita.edit');
-    Route::put('/kategoriberita/{id}', [KategoriberitaController::class, 'update'])->name('kategoriberita.update');
-    Route::delete('/kategoriberita/{id}', [KategoriberitaController::class, 'destroy'])->name('kategoriberita.destroy');
+
 
     // Manajemen User - Resource Controller
     Route::get('/user', [UserController::class, 'index'])->name('user.index');
@@ -60,12 +53,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 
-// Route untuk halaman utama (guest)
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
-
 // Fallback route
 Route::fallback(function () {
     return redirect('/login');
 });
+
+//Route Resource
+Route::resource('kategoriberita', KategoriBeritaController::class);

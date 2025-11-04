@@ -14,10 +14,6 @@
     @include('layouts.guest.styles')
     <!-- End Styles-->
 
-    <!-- ======= Theme Style =======-->
-    @include('layouts.guest.css')
-    <!-- End Theme Style-->
-
     <!-- ======= Apply theme =======-->
     @include('layouts.guest.apllytheme')
     <!-- ======= End Apply theme =======-->
@@ -137,24 +133,24 @@
                                     <button type="submit" class="btn btn-custom mb-3">Masuk</button>
                                 </form>
 
-                                <div class="login-divider">
+                               <div class="login-divider">
                                     <span>Atau masuk dengan</span>
                                 </div>
 
-                                <div class="social-login">
+                                <div class="social-register">
                                     <a href="https://accounts.google.com/v3/signin/identifier?hl=id&ifkv=ATuJsjxtOBeZDuRmB7aXp-t7SKJXmJLQ0gwLtISqhsxIyjcD8f26SWZ9gxRQXTnexAOh2jbXHugR&flowName=GlifWebSignIn&flowEntry=ServiceLogin&dsh=S1628295783%3A1709606966038322&theme=mn" class="social-btn">
                                         <i class="bi bi-google"></i>
                                         <span>Google</span>
                                     </a>
-                                    <a href="https://www.facebook.com/?locale=id_ID" class="social-btn">
+                                    <a href="https://www.facebook.com/r.php?entry_point=login" class="social-btn">
                                         <i class="bi bi-facebook"></i>
                                         <span>Facebook</span>
+                                    </a>
+                                </div>
 
-                                        <!-- Tambahkan di bagian bawah form login, sebelum penutup div login-right -->
-                                        <div class="login-link">
-                                            <p>Belum punya akun? <a href="{{ route('register') }}">Daftar di sini</a>
-                                            </p>
-                                        </div>
+                                <div class="login-link">
+                                    <p>belum punya akun? <a href="{{ route('register') }}">Daftar di sini</a></p>
+                                </div>
                                     </a>
                                 </div>
                             </div>
