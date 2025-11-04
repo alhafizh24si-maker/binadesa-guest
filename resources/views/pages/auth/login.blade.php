@@ -14,6 +14,10 @@
     @include('layouts.guest.styles')
     <!-- End Styles-->
 
+     <!-- ======= Theme Style =======-->
+    @include('layouts.guest.css')
+    <!-- End Theme Style-->
+
     <!-- ======= Apply theme =======-->
     @include('layouts.guest.apllytheme')
     <!-- ======= End Apply theme =======-->
@@ -167,4 +171,4 @@
 
     <!-- ======= login scripts =======-->
     @include('layouts.guest.loginscripts')
-<!-- ======= end login scripts =======-->
+
