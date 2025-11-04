@@ -50,96 +50,121 @@
             <div class="row justify-content-center">
               <div class="col-lg-12">
                 <div class="card-wrapper" data-aos="fade-up" data-aos-delay="300">
-                  <!-- Table Container -->
-                  <div class="p-4 rounded-4" style="background: var(--bs-body-bg); border: 1px solid var(--bs-border-color);">
-
-                    <!-- Add Button Section -->
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                      <h5 class="mb-0">Daftar Data Warga</h5>
-                      <a href="{{ route('warga.create') }}" class="btn btn-primary">
-                        <i class="bi bi-plus-circle me-2"></i>Tambah Data Warga
-                      </a>
+                  <!-- Header Card -->
+                  <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-body p-4">
+                      <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                          <h5 class="mb-1 fw-bold">Daftar Data Warga</h5>
+                          <p class="text-muted mb-0">Total {{ $warga->count() }} warga terdaftar</p>
+                        </div>
+                        <a href="{{ route('warga.create') }}" class="btn btn-primary">
+                          <i class="bi bi-plus-circle me-2"></i>Tambah Data Warga
+                        </a>
+                      </div>
                     </div>
+                  </div>
 
-                    @if($warga && $warga->count() > 0)
-                    <div class="table-responsive">
-                      <table class="table table-hover">
-                        <thead>
-                          <tr>
-                            <th scope="col" class="fw-bold">#</th>
-                            <th scope="col" class="fw-bold">No. KTP</th>
-                            <th scope="col" class="fw-bold">Nama</th>
-                            <th scope="col" class="fw-bold">Jenis Kelamin</th>
-                            <th scope="col" class="fw-bold">Agama</th>
-                            <th scope="col" class="fw-bold">Pekerjaan</th>
-                            <th scope="col" class="fw-bold">Telepon</th>
-                            <th scope="col" class="fw-bold">Email</th>
-                            <th scope="col" class="fw-bold">Dibuat</th>
-                            <th scope="col" class="fw-bold text-center">Aksi</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          @foreach($warga as $data)
-                          <tr>
-                            <th scope="row">{{ $loop->iteration }}</th>
-                            <td>
-                              <code>{{ $data->no_ktp }}</code>
-                            </td>
-                            <td>
-                              <strong>{{ $data->nama }}</strong>
-                            </td>
-                            <td>
-                              <span class="badge bg-{{ $data->jenis_kelamin == 'Laki-laki' ? 'primary' : 'success' }}">
-                                {{ $data->jenis_kelamin }}
-                              </span>
-                            </td>
-                            <td>
-                              {{ $data->agama ?? '-' }}
-                            </td>
-                            <td>
-                              {{ $data->pekerjaan ?? '-' }}
-                            </td>
-                            <td>
-                              {{ $data->telp ?? '-' }}
-                            </td>
-                            <td>
-                              {{ $data->email ?? '-' }}
-                            </td>
-                            <td>
-                              <small class="text-muted">
-                                {{ $data->created_at->format('d M Y') }}
-                              </small>
-                            </td>
-                            <td>
-                              <div class="d-flex justify-content-center gap-2">
-                                <!-- Edit Button -->
-                                <a href="{{ route('warga.edit', $data->warga_id) }}"
-                                   class="btn btn-sm btn-outline-primary"
-                                   data-bs-toggle="tooltip"
-                                   title="Edit Data">
-                                  <i class="bi bi-pencil"></i>
-                                </a>
-
-                                <!-- Delete Button -->
-                                <form action="{{ route('warga.destroy', $data->warga_id) }}"
-                                      method="POST"
-                                      class="d-inline"
-                                      onsubmit="return confirm('Apakah Anda yakin ingin menghapus data warga ini?')">
-                                  @csrf
-                                  @method('DELETE')
-                                  <button type="submit"
-                                          class="btn btn-sm btn-outline-danger"
-                                          data-bs-toggle="tooltip"
-                                          title="Hapus Data">
-                                    <i class="bi bi-trash"></i>
-                                  </button>
-                                </form>
+                  @if($warga && $warga->count() > 0)
+                    <!-- Warga List -->
+                    <div class="row g-4">
+                      @foreach($warga as $data)
+                      <div class="col-12">
+                        <div class="card warga-card border-0 shadow-sm h-100">
+                          <div class="card-body p-4">
+                            <div class="row align-items-center">
+                              <!-- Kolom 1: Nomor dan Info Dasar -->
+                              <div class="col-lg-2 col-md-3">
+                                <div class="d-flex align-items-center">
+                                  <div class="warga-number me-3">
+                                    <span class="badge bg-primary rounded-circle d-flex align-items-center justify-content-center">
+                                      {{ $loop->iteration }}
+                                    </span>
+                                  </div>
+                                  <div>
+                                    <h6 class="mb-1 fw-bold text-dark">{{ $data->nama }}</h6>
+                                    <small class="text-muted">
+                                      <code>{{ $data->no_ktp }}</code>
+                                    </small>
+                                  </div>
+                                </div>
                               </div>
-                            </td>
-                          </tr>
-                          @endforeach
-                        </tbody>
-                      </table>
+
+                              <!-- Kolom 2: Demografi -->
+                              <div class="col-lg-2 col-md-3">
+                                <div class="warga-demografi">
+                                  <div class="mb-1">
+                                    <span class="badge bg-{{ $data->jenis_kelamin == 'Laki-laki' ? 'primary' : 'success' }} me-2">
+                                      {{ $data->jenis_kelamin }}
+                                    </span>
+                                  </div>
+                                  <small class="text-muted">{{ $data->agama ?? '-' }}</small>
+                                </div>
+                              </div>
+
+                              <!-- Kolom 3: Pekerjaan -->
+                              <div class="col-lg-2 col-md-3">
+                                <div class="warga-pekerjaan">
+                                  <small class="text-muted d-block mb-1">Pekerjaan</small>
+                                  <span class="fw-medium">{{ $data->pekerjaan ?? '-' }}</span>
+                                </div>
+                              </div>
+
+                              <!-- Kolom 4: Kontak -->
+                              <div class="col-lg-3 col-md-3">
+                                <div class="warga-kontak">
+                                  <div class="mb-2">
+                                    <small class="text-muted d-block mb-1">Telepon</small>
+                                    <span class="fw-medium">{{ $data->telp ?? '-' }}</span>
+                                  </div>
+                                  <div>
+                                    <small class="text-muted d-block mb-1">Email</small>
+                                    <span class="fw-medium text-truncate d-inline-block" style="max-width: 200px;">
+                                      {{ $data->email ?? '-' }}
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <!-- Kolom 5: Tanggal & Aksi -->
+                              <div class="col-lg-3 col-md-12">
+                                <div class="d-flex justify-content-between align-items-center">
+                                  <div class="warga-tanggal">
+                                    <small class="text-muted">
+                                      <i class="bi bi-calendar me-1"></i>
+                                      {{ $data->created_at->format('d M Y') }}
+                                    </small>
+                                  </div>
+                                  <div class="warga-actions">
+                                    <div class="d-flex gap-2">
+                                      <a href="{{ route('warga.edit', $data->warga_id) }}"
+                                         class="btn btn-sm btn-outline-primary"
+                                         data-bs-toggle="tooltip"
+                                         title="Edit Data">
+                                        <i class="bi bi-pencil"></i>
+                                      </a>
+                                      <form action="{{ route('warga.destroy', $data->warga_id) }}"
+                                            method="POST"
+                                            class="d-inline"
+                                            onsubmit="return confirm('Apakah Anda yakin ingin menghapus data warga ini?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit"
+                                                class="btn btn-sm btn-outline-danger"
+                                                data-bs-toggle="tooltip"
+                                                title="Hapus Data">
+                                          <i class="bi bi-trash"></i>
+                                        </button>
+                                      </form>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      @endforeach
                     </div>
 
                     <!-- Pagination -->
@@ -151,21 +176,22 @@
                       </div>
                     </div>
 
-                    @else
+                  @else
                     <!-- Empty State -->
-                    <div class="text-center py-5">
-                      <div class="mb-4">
-                        <i class="bi bi-people display-1 text-muted"></i>
+                    <div class="card border-0 shadow-sm">
+                      <div class="card-body text-center py-5">
+                        <div class="mb-4">
+                          <i class="bi bi-people display-1 text-muted"></i>
+                        </div>
+                        <h4 class="text-muted mb-3">Belum ada data warga</h4>
+                        <p class="text-muted mb-4">Mulai dengan menambahkan data warga pertama Anda.</p>
+                        <a href="{{ route('warga.create') }}" class="btn btn-primary">
+                          <i class="bi bi-plus-circle me-2"></i>Tambah Data Warga
+                        </a>
                       </div>
-                      <h4 class="text-muted mb-3">Belum ada data warga</h4>
-                      <p class="text-muted mb-4">Mulai dengan menambahkan data warga pertama Anda.</p>
-                      <a href="{{ route('warga.create') }}" class="btn btn-primary">
-                        <i class="bi bi-plus-circle me-2"></i>Tambah Data Warga
-                      </a>
                     </div>
-                    @endif
+                  @endif
 
-                  </div>
                 </div>
               </div>
             </div>
@@ -175,4 +201,124 @@
 
       </main>
 
- @endsection
+      <style>
+        .warga-card {
+          transition: all 0.3s ease;
+          border: 1px solid #e9ecef;
+        }
+
+        .warga-card:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+          border-color: #0d6efd;
+        }
+
+        .warga-number .badge {
+          width: 40px;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 0.9rem;
+          font-weight: 600;
+        }
+
+        .warga-demografi .badge {
+          font-size: 0.75rem;
+          padding: 0.25rem 0.5rem;
+        }
+
+        .warga-kontak span {
+          font-size: 0.9rem;
+        }
+
+        .warga-actions .btn {
+          padding: 0.3rem 0.6rem;
+          border-radius: 6px;
+          font-size: 0.8rem;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+          .card-body {
+            padding: 1.5rem !important;
+          }
+
+          .row.align-items-center {
+            gap: 1rem;
+          }
+
+          .col-lg-2,
+          .col-lg-3 {
+            margin-bottom: 1rem;
+          }
+
+          .d-flex.justify-content-between.align-items-center {
+            flex-direction: column;
+            align-items: start !important;
+            gap: 1rem;
+          }
+
+          .warga-actions {
+            width: 100%;
+            justify-content: start !important;
+          }
+
+          .warga-number .badge {
+            width: 35px;
+            height: 35px;
+          }
+        }
+
+        @media (max-width: 576px) {
+          .card-body {
+            padding: 1.25rem !important;
+          }
+
+          .d-flex.align-items-center {
+            flex-direction: column;
+            align-items: start !important;
+            gap: 0.5rem;
+          }
+
+          .warga-number {
+            align-self: start;
+          }
+
+          .warga-demografi,
+          .warga-pekerjaan,
+          .warga-kontak {
+            text-align: left;
+          }
+
+          .warga-actions .btn {
+            flex: 1;
+            min-width: 70px;
+          }
+        }
+
+        /* Ensure consistent spacing */
+        .warga-demografi small,
+        .warga-pekerjaan small,
+        .warga-kontak small {
+          font-size: 0.8rem;
+        }
+
+        .warga-demografi span,
+        .warga-pekerjaan span,
+        .warga-kontak span {
+          font-size: 0.9rem;
+        }
+      </style>
+
+      <script>
+        // Initialize tooltips
+        document.addEventListener('DOMContentLoaded', function() {
+          var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+          var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+          });
+        });
+      </script>
+
+@endsection

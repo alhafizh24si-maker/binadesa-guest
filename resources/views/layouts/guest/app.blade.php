@@ -80,7 +80,65 @@
         }
     </style>
 
+@push('styles')
+<style>
+    .title-border-radius {
+        border-radius: 10px;
+    }
+    .card {
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+    }
+    .card-header {
+        border-bottom: 2px solid rgba(0,0,0,0.1);
+    }
+    .btn-group .btn {
+        margin: 0 2px;
+    }
+    .badge {
+        font-size: 0.8em;
+        padding: 0.35em 0.65em;
+    }
+</style>
+@endpush
 
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize tooltips
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+
+        // Auto-dismiss alerts after 5 seconds
+        const alerts = document.querySelectorAll('.alert');
+        alerts.forEach(function(alert) {
+            setTimeout(function() {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            }, 5000);
+        });
+
+        // Enhanced delete confirmation
+        const deleteForms = document.querySelectorAll('form[action*="destroy"]');
+        deleteForms.forEach(function(form) {
+            form.addEventListener('submit', function(e) {
+                const submitBtn = this.querySelector('button[type="submit"]');
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Menghapus...';
+                }
+            });
+        });
+
+        console.log('Keluarga index page loaded with enhanced features');
+    });
+</script>
+@endpush
     <!-- ======= Javascripts =======-->
     @include('layouts.guest.javascripts')
    <!-- ======= End Javascripts =======-->
