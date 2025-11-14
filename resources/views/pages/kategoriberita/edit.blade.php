@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Edit Kategori Berita - Binadesa</title>
+</head>
 
+<body>
     @extends('layouts.guest.app')
     @section('content')
         <!-- ======= Form Section =======-->
@@ -22,7 +24,7 @@
                 <div class="row justify-content-center">
                     <div class="col-lg-8">
                         <div class="form-wrapper" data-aos="fade-up" data-aos-delay="300">
-                            <form action="{{ route('kategoriberita.update', $kategori->kategori_id) }}" method="POST"
+                            <form action="{{ route('kategoriberita.update', $kategoriberita->kategori_id) }}" method="POST"
                                 class="p-5 rounded-4"
                                 style="background: var(--bs-body-bg); border: 1px solid var(--bs-border-color);">
                                 @csrf
@@ -30,12 +32,11 @@
 
                                 <div class="row gap-3 mb-4">
                                     <div class="col-md-12">
-                                        <label class="mb-2 fw-bold" for="name">Nama Kategori <span
-                                                class="text-danger">*</span></label>
-                                        <input class="form-control @error('name') is-invalid @enderror" id="name"
-                                            type="text" name="name" value="{{ old('name', $kategori->name) }}"
+                                        <label class="mb-2 fw-bold" for="nama">Nama Kategori <span class="text-danger">*</span></label>
+                                        <input class="form-control @error('nama') is-invalid @enderror" id="nama"
+                                            type="text" name="nama" value="{{ old('nama', $kategoriberita->nama) }}"
                                             placeholder="Masukkan nama kategori" required>
-                                        @error('name')
+                                        @error('nama')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
@@ -43,14 +44,14 @@
 
                                 <div class="row gap-3 mb-4">
                                     <div class="col-md-12">
-                                        <label class="mb-2 fw-bold" for="slug">Slug <span
-                                                class="text-danger">*</span></label>
+                                        <label class="mb-2 fw-bold" for="slug">Slug <span class="text-danger">*</span></label>
                                         <input class="form-control @error('slug') is-invalid @enderror" id="slug"
-                                            type="text" name="slug" value="{{ old('slug', $kategori->slug) }}"
-                                            placeholder="Masukkan slug" required>
+                                            type="text" name="slug" value="{{ old('slug', $kategoriberita->slug) }}"
+                                            placeholder="Slug akan digenerate otomatis" readonly>
                                         @error('slug')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
+                                        <div class="form-text">Slug digenerate otomatis dari nama kategori</div>
                                     </div>
                                 </div>
 
@@ -58,7 +59,7 @@
                                     <div class="col-md-12">
                                         <label class="mb-2 fw-bold" for="deskripsi">Deskripsi</label>
                                         <textarea class="form-control @error('deskripsi') is-invalid @enderror" id="deskripsi" name="deskripsi" rows="5"
-                                            placeholder="Masukkan deskripsi kategori (opsional)">{{ old('deskripsi', $kategori->deskripsi) }}</textarea>
+                                            placeholder="Masukkan deskripsi kategori (opsional)">{{ old('deskripsi', $kategoriberita->deskripsi) }}</textarea>
                                         @error('deskripsi')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -85,3 +86,26 @@
         </section>
         <!-- End Form Section-->
     @endsection
+
+    @push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Auto-generate slug ketika nama diubah
+            const namaInput = document.getElementById('nama');
+            const slugInput = document.getElementById('slug');
+
+            if (namaInput && slugInput) {
+                namaInput.addEventListener('input', function() {
+                    // Simple slug generation
+                    const slug = namaInput.value
+                        .toLowerCase()
+                        .replace(/[^\w ]+/g, '')
+                        .replace(/ +/g, '-');
+                    slugInput.value = slug;
+                });
+            }
+        });
+    </script>
+    @endpush
+</body>
+</html>

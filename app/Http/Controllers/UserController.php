@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-
 
 class UserController extends Controller
 {
@@ -14,8 +12,9 @@ class UserController extends Controller
      */
     public function index()
     {
-         $data['dataUser'] = User::all();
-        return view('pages.users.index', $data);
+        $dataUser = User::latest()->paginate(9);
+
+        return view('pages.users.index', compact('dataUser'));
     }
 
     /**
@@ -23,7 +22,7 @@ class UserController extends Controller
      */
     public function create()
     {
-       return view('pages.users.create');
+        return view('pages.users.create');
     }
 
     /**
@@ -31,60 +30,101 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //dd($request->all());
-        $data['name'] = $request->name;
-        $data['email']  = $request->email;
-        $data['password']   = Hash::make($request->password);
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:8|confirmed',
+        ]);
 
+        try {
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => bcrypt($request->password),
+                'plain_password' => $request->password, // Simpan password plain jika diperlukan
+            ]);
 
-        User::create($data);
+            return redirect()->route('user.index')
+                ->with('success', 'User <strong>' . $user->name . '</strong> berhasil ditambahkan!');
 
-        return redirect()->route('user.index')->with('success', 'Penambahan Data Berhasil!');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Gagal menambahkan user. Error: ' . $e->getMessage())
+                ->withInput();
+        }
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        $user = User::findOrFail($id);
+        return view('pages.users.show', compact('user'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-          $data['dataUser'] = User::findOrFail($id);
-        return view('pages.users.edit', $data);
+        $user = User::findOrFail($id);
+        return view('pages.users.edit', compact('user'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        $id = $id;
-        $user    = User::findOrFail($id);
+        $user = User::findOrFail($id);
 
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = $request->password;
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $id,
+            'password' => 'nullable|min:8|confirmed',
+        ]);
 
-        $user->save();
+        try {
+            $data = [
+                'name' => $request->name,
+                'email' => $request->email,
+            ];
 
-        return redirect()->route('user.index')->with('success', 'Perubahan Data Berhasil!');
+            // Update password hanya jika diisi
+            if ($request->filled('password')) {
+                $data['password'] = bcrypt($request->password);
+                $data['plain_password'] = $request->password;
+            }
+
+            $user->update($data);
+
+            return redirect()->route('user.index')
+                ->with('success', 'User <strong>' . $user->name . '</strong> berhasil diperbarui!');
+
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Gagal memperbarui user. Error: ' . $e->getMessage())
+                ->withInput();
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        $user = User::findOrFail($id);
+        try {
+            $user = User::findOrFail($id);
+            $userName = $user->name;
+            $user->delete();
 
-        $user->delete();
+            return redirect()->route('user.index')
+                ->with('success', 'User <strong>' . $userName . '</strong> berhasil dihapus!');
 
-        return redirect()->route('user.index')->with('success', 'Data berhasil dihapus');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Gagal menghapus user. Error: ' . $e->getMessage());
+        }
     }
 }

@@ -24,4 +24,9 @@ class Warga extends Model
     protected $casts = [
         'jenis_kelamin' => 'string'
     ];
+      public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
+

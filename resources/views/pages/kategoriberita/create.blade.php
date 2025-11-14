@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Tambah Kategori Berita - Binadesa</title>
+</head>
 
+<body>
     @extends('layouts.guest.app')
     @section('content')
         <!-- ======= Main =======-->
@@ -18,8 +20,7 @@
                         <div class="col-md-8 mx-auto text-center">
                             <span class="subtitle text-uppercase mb-3" data-aos="fade-up" data-aos-delay="0"></span>
                             <h2 class="mb-3" data-aos="fade-up" data-aos-delay="100">Tambah Kategori Berita</h2>
-                            <p data-aos="fade-up" data-aos-delay="200">Form untuk menambahkan kategori berita baru ke dalam
-                                sistem.</p>
+                            <p data-aos="fade-up" data-aos-delay="200">Form untuk menambahkan kategori berita baru ke dalam sistem.</p>
                         </div>
                     </div>
 
@@ -32,12 +33,11 @@
 
                                     <div class="row gap-3 mb-4">
                                         <div class="col-md-12">
-                                            <label class="mb-2 fw-bold" for="name">Nama Kategori <span
-                                                    class="text-danger">*</span></label>
-                                            <input class="form-control @error('name') is-invalid @enderror" id="name"
-                                                type="text" name="name" value="{{ old('name') }}"
+                                            <label class="mb-2 fw-bold" for="nama">Nama Kategori <span class="text-danger">*</span></label>
+                                            <input class="form-control @error('nama') is-invalid @enderror" id="nama"
+                                                type="text" name="nama" value="{{ old('nama') }}"
                                                 placeholder="Masukkan nama kategori" required>
-                                            @error('name')
+                                            @error('nama')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
                                         </div>
@@ -60,8 +60,7 @@
                                                 <button class="btn btn-primary fw-semibold" type="submit">
                                                     <i class="bi bi-save me-2"></i>Simpan Kategori
                                                 </button>
-                                                <a href="{{ route('kategoriberita.index') }}"
-                                                    class="btn btn-outline-secondary">
+                                                <a href="{{ route('kategoriberita.index') }}" class="btn btn-outline-secondary">
                                                     <i class="bi bi-arrow-left me-2"></i>Kembali
                                                 </a>
                                             </div>
@@ -77,3 +76,5 @@
 
         </main>
     @endsection
+</body>
+</html>

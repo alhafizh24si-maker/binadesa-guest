@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Kategoriberita;
+use App\Models\KategoriBerita;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -10,85 +10,93 @@ class KategoriberitaController extends Controller
 {
     public function index()
     {
-        $kategoriBerita = Kategoriberita::orderBy('created_at', 'desc')->paginate(10);
-        $data = [
-            'title' => 'Kategori Berita',
-            'kategoriBerita' => $kategoriBerita
-        ];
+    $kategoriberita = KategoriBerita::withCount('berita')->latest()->paginate(9);
 
-        return view('pages.kategoriberita.index', $data);
+    return view('pages.kategoriberita.index', compact('kategoriberita'));
     }
 
     public function create()
     {
-        $data = [
-            'title' => 'Tambah Kategori Berita'
-        ];
-
-        return view('pages.kategoriberita.create', $data);
+        return view('pages.kategoriberita.create');
     }
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:100',
+        $request->validate([
+            'nama' => 'required|string|max:100', // PERBAIKAN: 'nama' bukan 'name'
             'deskripsi' => 'nullable|string'
         ]);
 
-        // Generate slug dari name
-        $validated['slug'] = Str::slug($validated['name']);
+        // Generate slug dari nama
+        $slug = Str::slug($request->nama);
+        $counter = 1;
+        $originalSlug = $slug;
+        while (KategoriBerita::where('slug', $slug)->exists()) {
+            $slug = $originalSlug . '-' . $counter;
+            $counter++;
+        }
 
-        Kategoriberita::create($validated);
+        KategoriBerita::create([
+            'nama' => $request->nama,
+            'slug' => $slug,
+            'deskripsi' => $request->deskripsi
+        ]);
 
         return redirect()->route('kategoriberita.index')
-                        ->with('success', 'Kategori berita berhasil ditambahkan!');
-    }
-
-    public function show($id)
-    {
-        $kategori = Kategoriberita::findOrFail($id);
-        $data = [
-            'title' => 'Detail Kategori Berita',
-            'kategori' => $kategori
-        ];
-
-        return view('pages.kategoriberita.show', $data);
+            ->with('success', 'Kategori berita berhasil ditambahkan!');
     }
 
     public function edit($id)
     {
-        $kategori = Kategoriberita::findOrFail($id);
-        $data = [
-            'title' => 'Edit Kategori Berita',
-            'kategori' => $kategori
-        ];
-
-        return view('pages.kategoriberita.edit', $data);
+        $kategoriberita = KategoriBerita::findOrFail($id);
+        return view('pages.kategoriberita.edit', compact('kategoriberita'));
     }
 
     public function update(Request $request, $id)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:100',
+        $kategoriberita = KategoriBerita::findOrFail($id);
+
+        $request->validate([
+            'nama' => 'required|string|max:100', // PERBAIKAN: 'nama' bukan 'name'
             'deskripsi' => 'nullable|string'
         ]);
 
-        // Generate slug dari name
-        $validated['slug'] = Str::slug($validated['name']);
+        $data = [
+            'nama' => $request->nama,
+            'deskripsi' => $request->deskripsi
+        ];
 
-        $kategori = Kategoriberita::findOrFail($id);
-        $kategori->update($validated);
+        // Update slug jika nama berubah
+        if ($kategoriberita->nama != $request->nama) {
+            $slug = Str::slug($request->nama);
+            $counter = 1;
+            $originalSlug = $slug;
+            while (KategoriBerita::where('slug', $slug)->where('kategori_id', '!=', $id)->exists()) {
+                $slug = $originalSlug . '-' . $counter;
+                $counter++;
+            }
+            $data['slug'] = $slug;
+        }
+
+        $kategoriberita->update($data);
 
         return redirect()->route('kategoriberita.index')
-                        ->with('success', 'Kategori berita berhasil diperbarui!');
+            ->with('success', 'Kategori berita berhasil diperbarui!');
     }
 
     public function destroy($id)
     {
-        $kategori = Kategoriberita::findOrFail($id);
-        $kategori->delete();
+        $kategoriberita = KategoriBerita::findOrFail($id);
+
+        // Cek apakah kategori memiliki berita
+        if ($kategoriberita->berita()->count() > 0) {
+            return redirect()->route('kategoriberita.index')
+                ->with('error', 'Tidak dapat menghapus kategori karena masih memiliki berita terkait.');
+        }
+
+        $kategoriberita->delete();
 
         return redirect()->route('kategoriberita.index')
-                        ->with('success', 'Kategori berita berhasil dihapus!');
+            ->with('success', 'Kategori berita berhasil dihapus!');
     }
 }

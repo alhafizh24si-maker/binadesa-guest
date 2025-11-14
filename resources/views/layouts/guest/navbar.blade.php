@@ -57,6 +57,11 @@
                   </a>
                 </li>
                 <li class="nav-item">
+                  <a href="{{ route('berita.index') }}" class="nav-link {{ request()->is('kategoriberita*') ? 'active' : '' }}">
+                    Data Berita
+                  </a>
+                </li>
+                <li class="nav-item">
                   <a href="{{ route('user.index') }}" class="nav-link {{ request()->is('users*') ? 'active' : '' }}">
                     Manajemen User
                   </a>
@@ -75,6 +80,11 @@
                     <li>
                       <a href="{{ route('kategoriberita.create') }}" class="dropdown-item">
                         Tambah Kategori
+                      </a>
+                    </li>
+                     <li>
+                      <a href="{{ route('berita.create') }}" class="dropdown-item">
+                        Tambah Berita
                       </a>
                     </li>
                     <li>

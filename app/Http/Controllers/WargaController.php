@@ -9,7 +9,7 @@ class WargaController extends Controller
 {
     public function index()
     {
-        $warga = Warga::orderBy('created_at', 'desc')->paginate(10);
+        $warga = Warga::orderBy('created_at', 'desc')->paginate();
         return view('pages.warga.index', compact('warga'));
     }
 
