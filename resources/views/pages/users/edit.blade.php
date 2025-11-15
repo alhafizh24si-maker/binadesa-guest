@@ -26,7 +26,7 @@
                     <div class="row justify-content-center">
                         <div class="col-lg-8">
                             <div class="form-wrapper" data-aos="fade-up" data-aos-delay="300">
-                                <form action="{{ route('user.update', $dataUser->id) }}" method="POST"
+                                <form action="{{ route('user.update', $user->id) }}" method="POST"
                                     class="p-5 rounded-4"
                                     style="background: var(--bs-body-bg); border: 1px solid var(--bs-border-color);">
                                     @method('PUT')
@@ -37,7 +37,7 @@
                                             <label class="mb-2 fw-bold" for="name">Nama Lengkap <span
                                                     class="text-danger">*</span></label>
                                             <input class="form-control @error('name') is-invalid @enderror" id="name"
-                                                type="text" name="name" value="{{ old('name', $dataUser->name) }}"
+                                                type="text" name="name" value="{{ old('name', $user->name) }}"
                                                 placeholder="Masukkan nama lengkap" maxlength="100" required>
                                             @error('name')
                                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -50,7 +50,7 @@
                                             <label class="mb-2 fw-bold" for="email">Email <span
                                                     class="text-danger">*</span></label>
                                             <input class="form-control @error('email') is-invalid @enderror" id="email"
-                                                type="email" name="email" value="{{ old('email', $dataUser->email) }}"
+                                                type="email" name="email" value="{{ old('email', $user->email) }}"
                                                 placeholder="Masukkan alamat email" maxlength="100" required>
                                             @error('email')
                                                 <div class="invalid-feedback">{{ $message }}</div>
