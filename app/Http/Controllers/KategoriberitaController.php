@@ -8,9 +8,24 @@ use Illuminate\Support\Str;
 
 class KategoriberitaController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-    $kategoriberita = KategoriBerita::withCount('berita')->latest()->paginate(9);
+    $query = KategoriBerita::query();
+
+    // Search functionality
+    if ($request->has('search') && $request->search != '') {
+        $search = $request->search;
+        $query->where(function($q) use ($search) {
+            $q->where('nama', 'like', '%' . $search . '%')
+              ->orWhere('slug', 'like', '%' . $search . '%')
+              ->orWhere('deskripsi', 'like', '%' . $search . '%');
+        });
+    }
+     if ($request->has('filter_slug') && $request->filter_slug != '') {
+            $query->where('slug', 'like', '%' . $request->filter_slug . '%');
+        }
+
+    $kategoriberita = $query->orderBy('created_at', 'desc')->paginate(12);
 
     return view('pages.kategoriberita.index', compact('kategoriberita'));
     }

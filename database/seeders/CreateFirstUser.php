@@ -15,7 +15,7 @@ class CreateFirstUser extends Seeder
         User::create([
             'name'     => 'Admin',
             'email'    => 'Shio@gmail.com',
-            'password' => Hash::make('Shio'),
+            'password' => Hash::make('Shio123'),
         ]);
     }
 }

@@ -14,9 +14,32 @@ class BeritaController extends Controller
      */
     public function index(Request $request)
     {
-        $berita = Berita::with('kategori')->orderBy('created_at', 'desc')->paginate(10);
+        $filterableColumns = ['status'];
 
-        return view('pages.berita.index', compact('berita'));
+        $query = Berita::with('kategori');
+
+    // Search functionality
+    if ($request->has('search') && $request->search != '') {
+        $search = $request->search;
+        $query->where(function($q) use ($search) {
+            $q->where('judul', 'like', '%' . $search . '%')
+              ->orWhere('penulis', 'like', '%' . $search . '%')
+              ->orWhere('isi_html', 'like', '%' . $search . '%')
+              ->orWhere('slug', 'like', '%' . $search . '%');
+        });
+    }
+     if ($request->has('status') && $request->status != '' && $request->status != 'semua') {
+            $query->where('status', $request->status);
+        }
+
+    $berita = $query->orderBy('created_at', 'desc')->paginate(6);
+
+    // Count statistics
+    $publishedCount = Berita::where('status', 'terbit')->count();
+    $draftCount = Berita::where('status', 'draft')->count();
+    $categoryCount = Berita::distinct('kategori_id')->count('kategori_id');
+
+        return view('pages.berita.index', compact('berita', 'publishedCount', 'draftCount', 'categoryCount'));
     }
 
     /**

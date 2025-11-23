@@ -7,11 +7,25 @@ use Illuminate\Http\Request;
 
 class WargaController extends Controller
 {
-    public function index()
-    {
-        $warga = Warga::orderBy('created_at', 'desc')->paginate();
-        return view('pages.warga.index', compact('warga'));
-    }
+    public function index(Request $request)
+{
+    $filterableColumns = ['jenis_kelamin'];
+
+    $searchableColumns = ['no_ktp',
+        'nama',
+        'jenis_kelamin',
+        'agama',
+        'pekerjaan',
+        'telp',
+        'email'];
+
+    $warga = Warga::filter($request, $filterableColumns)
+                 ->orderBy('created_at', 'desc')
+                 ->paginate(10)
+                 ->withQueryString();
+
+    return view('pages.warga.index', compact('warga'));
+}
 
     public function create()
     {

@@ -18,7 +18,8 @@
                 <div class="container">
                     <div class="row mb-5">
                         <div class="col-md-8 mx-auto text-center">
-                            <span class="subtitle text-uppercase mb-3" data-aos="fade-up" data-aos-delay="0">Admin Panel</span>
+                            <span class="subtitle text-uppercase mb-3" data-aos="fade-up" data-aos-delay="0">Admin
+                                Panel</span>
                             <h2 class="mb-3" data-aos="fade-up" data-aos-delay="100">Data User</h2>
                             <p data-aos="fade-up" data-aos-delay="200">Kelola semua user yang terdaftar dalam sistem.</p>
                         </div>
@@ -27,10 +28,12 @@
                     @if (session('success'))
                         <div class="row justify-content-center mb-4">
                             <div class="col-lg-10">
-                                <div class="alert alert-success alert-dismissible fade show" role="alert" data-aos="fade-up">
+                                <div class="alert alert-success alert-dismissible fade show" role="alert"
+                                    data-aos="fade-up">
                                     <i class="bi bi-check-circle-fill me-2"></i>
                                     {!! session('success') !!}
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
                                 </div>
                             </div>
                         </div>
@@ -39,10 +42,12 @@
                     @if (session('error'))
                         <div class="row justify-content-center mb-4">
                             <div class="col-lg-10">
-                                <div class="alert alert-danger alert-dismissible fade show" role="alert" data-aos="fade-up">
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert"
+                                    data-aos="fade-up">
                                     <i class="bi bi-exclamation-triangle-fill me-2"></i>
                                     {!! session('error') !!}
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
                                 </div>
                             </div>
                         </div>
@@ -51,13 +56,96 @@
                     <div class="row justify-content-center">
                         <div class="col-lg-12">
                             <div class="card-wrapper" data-aos="fade-up" data-aos-delay="300">
+
+                                <!-- Search & Filter Form -->
+                                <div class="card border-0 shadow-sm mb-4">
+                                    <div class="card-body">
+                                        <form method="GET" action="{{ route('user.index') }}" id="searchForm">
+                                            <div class="row g-3 align-items-center">
+                                                <!-- Search Box -->
+                                                <div class="col-md-4">
+                                                    <label class="form-label fw-medium">Search</label>
+                                                    <div class="input-group">
+                                                        <input type="text" name="search" class="form-control"
+                                                            value="{{ request('search') }}" placeholder="Cari nama atau email...">
+                                                        <button type="submit" class="btn btn-primary">
+                                                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                                                <path
+                                                                    d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                                                            </svg>
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Filter Name -->
+                                                <div class="col-md-4">
+                                                    <label class="form-label fw-medium">Filter Nama</label>
+                                                    <div class="input-group">
+                                                        <input type="text" name="filter_name" class="form-control"
+                                                            value="{{ request('filter_name') }}" placeholder="Filter berdasarkan nama...">
+                                                        <button type="submit" class="btn btn-outline-primary">
+                                                            <i class="bi bi-funnel"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Action Buttons -->
+                                                <div class="col-md-4">
+                                                    <label class="form-label">&nbsp;</label>
+                                                    <div class="d-flex gap-2">
+                                                        @if (request('search') || request('filter_name'))
+                                                            <a href="{{ route('user.index') }}"
+                                                                class="btn btn-outline-secondary flex-fill">
+                                                                <i class="bi bi-arrow-clockwise me-1"></i>Reset
+                                                            </a>
+                                                        @endif
+                                                        <a href="{{ route('user.create') }}" class="btn btn-success flex-fill">
+                                                            <i class="bi bi-plus-circle me-1"></i>Tambah
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Active Filters Info -->
+                                            @if (request('search') || request('filter_name'))
+                                            <div class="row mt-3">
+                                                <div class="col-12">
+                                                    <div class="d-flex flex-wrap gap-2 align-items-center">
+                                                        <small class="text-muted">Filter aktif:</small>
+                                                        @if (request('search'))
+                                                        <span class="badge bg-primary">
+                                                            Search: "{{ request('search') }}"
+                                                            <a href="{{ route('user.index', ['filter_name' => request('filter_name')]) }}"
+                                                               class="text-white ms-1" style="text-decoration: none;">×</a>
+                                                        </span>
+                                                        @endif
+                                                        @if (request('filter_name'))
+                                                        <span class="badge bg-info text-dark">
+                                                            Nama: "{{ request('filter_name') }}"
+                                                            <a href="{{ route('user.index', ['search' => request('search')]) }}"
+                                                               class="text-dark ms-1" style="text-decoration: none;">×</a>
+                                                        </span>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @endif
+                                        </form>
+                                    </div>
+                                </div>
+
                                 <!-- Header Card -->
                                 <div class="card border-0 shadow-sm mb-4">
                                     <div class="card-body p-4">
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div>
                                                 <h5 class="mb-1 fw-bold">Daftar User</h5>
-                                                <p class="text-muted mb-0">Total {{ $dataUser->count() }} user terdaftar</p>
+                                                <p class="text-muted mb-0">
+                                                    Total {{ $dataUser->total() }} user terdaftar
+                                                    @if(request('search') || request('filter_name'))
+                                                        ({{ $dataUser->count() }} ditemukan)
+                                                    @endif
+                                                </p>
                                             </div>
                                             <a href="{{ route('user.create') }}" class="btn btn-success">
                                                 <i class="bi bi-plus-circle me-2"></i>Tambah User
@@ -71,28 +159,53 @@
                                     <div class="row g-4">
                                         @foreach ($dataUser as $item)
                                             <div class="col-xl-4 col-lg-6 col-md-6">
-                                                <div class="card news-card border-0 shadow-sm h-100" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
+                                                <div class="card news-card border-0 shadow-sm h-100" data-aos="fade-up"
+                                                    data-aos-delay="{{ $loop->index * 100 }}">
                                                     <div class="card-body">
                                                         <!-- Header dengan avatar dan nomor -->
                                                         <div class="d-flex justify-content-between align-items-start mb-3">
                                                             <div class="user-avatar">
-                                                                <div class="avatar-wrapper bg-primary bg-opacity-10 rounded-circle p-3">
+                                                                <div
+                                                                    class="avatar-wrapper bg-primary bg-opacity-10 rounded-circle p-3">
                                                                     <i class="bi bi-person-fill text-primary fs-4"></i>
                                                                 </div>
                                                             </div>
                                                             <div class="user-number">
-                                                                <span class="badge bg-secondary">#{{ $loop->iteration }}</span>
+                                                                <span
+                                                                    class="badge bg-secondary">#{{ ($dataUser->currentPage() - 1) * $dataUser->perPage() + $loop->iteration }}</span>
                                                             </div>
                                                         </div>
 
-                                                        <!-- Nama User -->
-                                                        <h5 class="card-title mb-2">{{ $item->name }}</h5>
+                                                        <!-- Nama User dengan highlight jika filter aktif -->
+                                                        <h5 class="card-title mb-2">
+                                                            @if(request('filter_name'))
+                                                                @php
+                                                                    $name = $item->name;
+                                                                    $filterName = request('filter_name');
+                                                                    $highlightedName = preg_replace('/(' . preg_quote($filterName, '/') . ')/i', '<mark class="bg-warning">$1</mark>', $name);
+                                                                @endphp
+                                                                {!! $highlightedName !!}
+                                                            @else
+                                                                {{ $item->name }}
+                                                            @endif
+                                                        </h5>
 
                                                         <!-- Email -->
                                                         <div class="mb-3">
                                                             <div class="email-container">
                                                                 <i class="bi bi-envelope text-muted me-2"></i>
-                                                                <span class="text-muted small">{{ $item->email }}</span>
+                                                                <span class="text-muted small">
+                                                                    @if(request('search'))
+                                                                        @php
+                                                                            $email = $item->email;
+                                                                            $searchTerm = request('search');
+                                                                            $highlightedEmail = preg_replace('/(' . preg_quote($searchTerm, '/') . ')/i', '<mark class="bg-warning">$1</mark>', $email);
+                                                                        @endphp
+                                                                        {!! $highlightedEmail !!}
+                                                                    @else
+                                                                        {{ $item->email }}
+                                                                    @endif
+                                                                </span>
                                                             </div>
                                                         </div>
 
@@ -100,7 +213,8 @@
                                                         <div class="mb-3">
                                                             <div class="user-id-container">
                                                                 <i class="bi bi-person-badge text-muted me-2"></i>
-                                                                <code class="text-muted small">ID: {{ $item->id }}</code>
+                                                                <code class="text-muted small">ID:
+                                                                    {{ $item->id }}</code>
                                                             </div>
                                                         </div>
 
@@ -109,16 +223,16 @@
                                                             <div class="password-container">
                                                                 <small class="text-muted d-block mb-2">Password</small>
                                                                 <div class="d-flex align-items-center">
-                                                                    <span class="text-muted me-2 password-dots">••••••••</span>
+                                                                    <span
+                                                                        class="text-muted me-2 password-dots">••••••••</span>
                                                                     <button type="button"
-                                                                            class="btn btn-outline-secondary btn-sm password-toggle"
-                                                                            onclick="togglePassword({{ $item->id }})"
-                                                                            data-bs-toggle="tooltip"
-                                                                            title="Tampilkan Password">
+                                                                        class="btn btn-outline-secondary btn-sm password-toggle"
+                                                                        onclick="togglePassword({{ $item->id }})"
+                                                                        data-bs-toggle="tooltip" title="Tampilkan Password">
                                                                         <i class="bi bi-eye"></i>
                                                                     </button>
                                                                     <span id="password-{{ $item->id }}"
-                                                                          class="password-text d-none fw-medium text-success ms-2">
+                                                                        class="password-text d-none fw-medium text-success ms-2">
                                                                         {{ $item->plain_password ?? 'Tidak tersedia' }}
                                                                     </span>
                                                                 </div>
@@ -131,22 +245,19 @@
                                                         <div class="d-flex justify-content-between align-items-center">
                                                             <div class="btn-group w-100">
                                                                 <a href="{{ route('user.edit', $item->id) }}"
-                                                                   class="btn btn-sm btn-outline-primary flex-fill"
-                                                                   data-bs-toggle="tooltip"
-                                                                   title="Edit User">
-                                                                    <i class="bi bi-pencil"></i>
+                                                                    class="btn btn-sm btn-outline-primary flex-fill"
+                                                                    data-bs-toggle="tooltip" title="Edit User">
+                                                                    <i class="bi bi-pencil"></i> Edit
                                                                 </a>
                                                                 <form action="{{ route('user.destroy', $item->id) }}"
-                                                                      method="POST"
-                                                                      class="d-inline flex-fill">
+                                                                    method="POST" class="d-inline flex-fill">
                                                                     @csrf
                                                                     @method('DELETE')
                                                                     <button type="submit"
-                                                                            class="btn btn-sm btn-outline-danger w-100"
-                                                                            data-bs-toggle="tooltip"
-                                                                            title="Hapus User"
-                                                                            onclick="return confirm('Apakah Anda yakin ingin menghapus user {{ $item->name }}?')">
-                                                                        <i class="bi bi-trash"></i>
+                                                                        class="btn btn-sm btn-outline-danger w-100"
+                                                                        data-bs-toggle="tooltip" title="Hapus User"
+                                                                        onclick="return confirm('Apakah Anda yakin ingin menghapus user {{ $item->name }}?')">
+                                                                        <i class="bi bi-trash"></i> Hapus
                                                                     </button>
                                                                 </form>
                                                             </div>
@@ -158,15 +269,9 @@
                                     </div>
 
                                     <!-- Pagination -->
-                                    @if ($dataUser->hasPages())
-                                    <div class="row mt-4">
-                                        <div class="col-md-12">
-                                            <nav aria-label="Page navigation">
-                                                {{ $dataUser->links() }}
-                                            </nav>
-                                        </div>
+                                    <div class="mt-4">
+                                        {{ $dataUser->links('pagination::bootstrap-5') }}
                                     </div>
-                                    @endif
                                 @else
                                     <!-- Empty State -->
                                     <div class="card border-0 shadow-sm">
@@ -174,18 +279,36 @@
                                             <div class="mb-4">
                                                 <i class="bi bi-person-x display-1 text-muted"></i>
                                             </div>
-                                            <h4 class="text-muted mb-3">Belum ada data user</h4>
-                                            <p class="text-muted mb-4">Mulai dengan menambahkan user pertama ke sistem.</p>
-                                            <a href="{{ route('user.create') }}" class="btn btn-success">
-                                                <i class="bi bi-plus-circle me-2"></i>Tambah User Pertama
-                                            </a>
+                                            <h4 class="text-muted mb-3">
+                                                @if(request('search') || request('filter_name'))
+                                                    Tidak ada user yang ditemukan
+                                                @else
+                                                    Belum ada data user
+                                                @endif
+                                            </h4>
+                                            <p class="text-muted mb-4">
+                                                @if(request('search') || request('filter_name'))
+                                                    Coba ubah kata kunci pencarian atau filter nama Anda.
+                                                @else
+                                                    Mulai dengan menambahkan user pertama ke sistem.
+                                                @endif
+                                            </p>
+                                            <div class="d-flex gap-2 justify-content-center">
+                                                @if(request('search') || request('filter_name'))
+                                                    <a href="{{ route('user.index') }}" class="btn btn-outline-secondary">
+                                                        <i class="bi bi-arrow-clockwise me-1"></i>Reset Pencarian
+                                                    </a>
+                                                @endif
+                                                <a href="{{ route('user.create') }}" class="btn btn-success">
+                                                    <i class="bi bi-plus-circle me-2"></i>Tambah User
+                                                </a>
+                                            </div>
                                         </div>
                                     </div>
                                 @endif
                             </div>
                         </div>
                     </div>
-                </div>
             </section>
             <!-- End Data Section-->
 
@@ -236,11 +359,18 @@
                 color: white !important;
             }
 
-            .email-container, .user-id-container, .password-container {
+            .email-container,
+            .user-id-container,
+            .password-container {
                 background: #f8f9fa;
                 padding: 0.5rem;
                 border-radius: 6px;
                 border: 1px solid #e9ecef;
+            }
+
+            mark {
+                padding: 0.1em 0.2em;
+                border-radius: 3px;
             }
 
             /* Responsive adjustments */
@@ -297,7 +427,8 @@
 
             // Password toggle function
             function togglePassword(userId) {
-                const passwordDots = document.querySelector(`#password-${userId}`).previousElementSibling.previousElementSibling;
+                const passwordDots = document.querySelector(`#password-${userId}`).previousElementSibling
+                .previousElementSibling;
                 const passwordText = document.querySelector(`#password-${userId}`);
                 const toggleButton = document.querySelector(`[onclick="togglePassword(${userId})"]`);
 
@@ -320,6 +451,15 @@
                     toggleButton.setAttribute('data-bs-original-title', toggleButton.getAttribute('title'));
                 }
             }
+
+            // Auto submit form when filter name changes (optional)
+            document.querySelector('input[name="filter_name"]').addEventListener('input', function(e) {
+                if (e.target.value.length >= 3 || e.target.value.length === 0) {
+                    setTimeout(() => {
+                        document.getElementById('searchForm').submit();
+                    }, 500);
+                }
+            });
         </script>
     @endsection
 </body>
