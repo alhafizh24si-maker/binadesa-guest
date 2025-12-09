@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daftar - Binadesa</title>
 
-  <!-- ======= Google Font =======-->
+    <!-- ======= Google Font =======-->
     @include('layouts.guest.googlefont')
     <!-- End Google Font-->
 
@@ -25,6 +25,33 @@
     @include('layouts.guest.register')
     <!-- ======= end register css =======-->
 
+    <style>
+        /* Tambahkan styling untuk logo */
+        .register-logo {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .register-logo img {
+            max-width: 100px;
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+        .register-brand {
+            color: var(--primary-color, #007bff);
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .register-tagline {
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
 <body>
     <div class="container">
         <div class="row justify-content-center">
@@ -79,9 +106,16 @@
                         </div>
                         <div class="col-lg-6">
                             <div class="register-right">
+                                <!-- Tambahkan logo di sini -->
+                                <div class="register-logo">
+                                    <!-- Ganti 'logo-binadesa.png' dengan path logo Anda -->
+                                     <img src="{{ asset('assets-guest/images/logobinadesa.png') }}" alt="Logo Binadesa">
+                                </div>
+
                                 <div class="text-center mb-4">
-                                    <h1 class="text-primary">Binadesa</h1>
-                                    <p class="text-muted">Platform Desa Digital</p>
+                                    <!-- Tampilkan teks Binadesa di bawah logo -->
+                                    <h1 class="register-brand">Portal Platform</h1>
+                                    <p class="register-tagline">Platform Desa Digital</p>
                                 </div>
 
                                 <h2 class="register-title">Buat Akun Baru</h2>
@@ -260,3 +294,5 @@
     <!-- ======= register scripts =======-->
    @include('layouts.guest.registerscripts')
     <!-- ======= End register scripts =======-->
+</body>
+</html>

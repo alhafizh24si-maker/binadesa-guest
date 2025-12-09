@@ -26,6 +26,34 @@
     @include('layouts.guest.logincss')
     <!-- End Login CSS-->
 
+    <style>
+        /* Tambahkan styling untuk logo */
+        .login-logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .login-logo img {
+            max-width: 100px;
+            height: auto;
+            margin-bottom: 15px;
+        }
+
+        .login-brand {
+            color: var(--primary-color, #007bff);
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .login-tagline {
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-bottom: 25px;
+        }
+    </style>
+</head>
+
 <body>
     <div class="container">
         <div class="row justify-content-center">
@@ -70,9 +98,16 @@
                         </div>
                         <div class="col-lg-6">
                             <div class="login-right">
+                                <!-- Tambahkan logo di sini -->
+                                <div class="login-logo">
+
+                                    <img src="{{ asset('assets-guest/images/logobinadesa.png') }}" alt="Logo Binadesa">
+                                </div>
+
                                 <div class="text-center mb-4">
-                                    <h1 class="text-primary">Binadesa</h1>
-                                    <p class="text-muted">Platform Desa Digital</p>
+                                    <!-- Tampilkan teks Binadesa di bawah logo -->
+                                    <h1 class="login-brand">Portal Platform</h1>
+                                    <p class="login-tagline">Platform Desa Digital</p>
                                 </div>
 
                                 <h2 class="login-title">Masuk ke Akun</h2>
@@ -155,8 +190,6 @@
                                 <div class="login-link">
                                     <p>belum punya akun? <a href="{{ route('register') }}">Daftar di sini</a></p>
                                 </div>
-                                    </a>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -171,4 +204,5 @@
 
     <!-- ======= login scripts =======-->
     @include('layouts.guest.loginscripts')
-
+</body>
+</html>

@@ -34,7 +34,7 @@
         <!-- ======= Main =======-->
         <main>
             <!-- ======= Hero Section =======-->
-            <section class="hero-section" id="home">
+               <section class="hero-section" id="home" style="padding-top: 40px;">
                 <div class="container">
                     <div class="row align-items-center">
                         <div class="col-lg-6 mb-4 mb-lg-0">
@@ -183,7 +183,7 @@
                                         </div>
                                         <h3 class="fs-1 fw-bold">
                                             <span class="purecounter" data-purecounter-start="0"
-                                                data-purecounter-end="1250" data-purecounter-duration="2">0</span>
+                                                data-purecounter-end="1250" data-purecounter-duration="2">100</span>
                                             <span>+</span>
                                         </h3>
                                         <p class="mb-0">Warga Terdaftar</p>
@@ -196,7 +196,7 @@
                                         </div>
                                         <h3 class="fs-1 fw-bold">
                                             <span class="purecounter" data-purecounter-start="0"
-                                                data-purecounter-end="156" data-purecounter-duration="2">0</span>
+                                                data-purecounter-end="156" data-purecounter-duration="2">45</span>
                                             <span>+</span>
                                         </h3>
                                         <p class="mb-0">Berita Terbit</p>
@@ -209,7 +209,7 @@
                                         </div>
                                         <h3 class="fs-1 fw-bold">
                                             <span class="purecounter" data-purecounter-start="0"
-                                                data-purecounter-end="24" data-purecounter-duration="2">0</span>
+                                                data-purecounter-end="24" data-purecounter-duration="2">43</span>
                                             <span>+</span>
                                         </h3>
                                         <p class="mb-0">Program Aktif</p>
@@ -222,7 +222,7 @@
                                         </div>
                                         <h3 class="fs-1 fw-bold">
                                             <span class="purecounter" data-purecounter-start="0"
-                                                data-purecounter-end="15" data-purecounter-duration="2">0</span>
+                                                data-purecounter-end="15" data-purecounter-duration="2">15</span>
                                             <span>+</span>
                                         </h3>
                                         <p class="mb-0">Desa Bergabung</p>
@@ -244,33 +244,162 @@
                                 Kami</span>
                             <h2 class="section-title text-center mb-3" data-aos="fade-up" data-aos-delay="100">
                                 Mengenal Binadesa Lebih Dekat</h2>
-                            <p data-aos="fade-up" data-aos-delay="200">Platform digital inovatif yang didedikasikan
-                                untuk memajukan desa melalui teknologi.</p>
+                            <p data-aos="fade-up" data-aos-delay="200" class="lead">Platform digital inovatif yang didedikasikan untuk memajukan desa melalui teknologi dan kolaborasi.</p>
                         </div>
                     </div>
-                    <div class="row g-4">
-                        <div class="col-md-6" data-aos="fade-up" data-aos-delay="0">
-                            <div class="feature-card">
-                                <div class="icon text-center mb-4 bg-primary rounded-circle d-inline-flex align-items-center justify-content-center text-white"
-                                    style="width: 70px; height: 70px;">
-                                    <i class="bi bi-eye fs-4"></i>
+
+                    <div class="row g-5 align-items-center">
+                        <!-- Gambar di sebelah kiri -->
+                        <div class="col-md-6" data-aos="fade-right" data-aos-delay="300">
+                            <div class="about-image position-relative">
+                                <img src="{{ asset('assets-guest/images/desa(1).jpg') }}"
+                                     class="img-fluid rounded-4 shadow-lg"
+                                     alt="Binadesa Platform Desa Digital"
+                                     style="width: 100%; height: 400px; object-fit: cover;">
+                                <div class="overlay-text position-absolute bottom-0 start-0 p-4 text-white">
+                                    <h4 class="mb-2">Transformasi Digital Desa</h4>
+                                    <p class="mb-0">Membawa desa ke era digital</p>
                                 </div>
-                                <h3 class="fs-5 fw-bold mb-3">Visi Kami</h3>
-                                <p class="mb-0">Menjadi platform digital terdepan dalam menghubungkan warga dengan
-                                    informasi dan layanan desa, menciptakan masyarakat desa yang modern, transparan, dan
-                                    sejahtera.</p>
                             </div>
                         </div>
-                        <div class="col-md-6" data-aos="fade-up" data-aos-delay="100">
-                            <div class="feature-card">
-                                <div class="icon text-center mb-4 bg-success rounded-circle d-inline-flex align-items-center justify-content-center text-white"
-                                    style="width: 70px; height: 70px;">
-                                    <i class="bi bi-bullseye fs-4"></i>
+
+                        <!-- Konten di sebelah kanan -->
+                        <div class="col-md-6" data-aos="fade-left" data-aos-delay="400">
+                            <div class="about-content">
+                                <h3 class="mb-4 fw-bold">Apa Itu Binadesa?</h3>
+                                <p class="mb-4">
+                                    <strong>Binadesa</strong> adalah Platform Desa Digital yang bertujuan untuk mengubah cara pengelolaan
+                                    dan komunikasi di tingkat desa melalui teknologi informasi. Kami hadir sebagai solusi
+                                    untuk mengintegrasikan berbagai aspek kehidupan desa dalam satu platform yang mudah
+                                    diakses dan digunakan.
+                                </p>
+
+                                <div class="about-features mb-4">
+                                    <div class="d-flex align-items-start mb-3">
+                                        <div class="me-3">
+                                            <i class="bi bi-check-circle-fill text-success fs-5"></i>
+                                        </div>
+                                        <div>
+                                            <p class="mb-1 fw-semibold">Terintegrasi</p>
+                                            <p class="mb-0 text-muted">Semua layanan desa dalam satu platform</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex align-items-start mb-3">
+                                        <div class="me-3">
+                                            <i class="bi bi-check-circle-fill text-success fs-5"></i>
+                                        </div>
+                                        <div>
+                                            <p class="mb-1 fw-semibold">Mudah Diakses</p>
+                                            <p class="mb-0 text-muted">Dapat diakses melalui berbagai perangkat</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex align-items-start mb-3">
+                                        <div class="me-3">
+                                            <i class="bi bi-check-circle-fill text-success fs-5"></i>
+                                        </div>
+                                        <div>
+                                            <p class="mb-1 fw-semibold">Real-time</p>
+                                            <p class="mb-0 text-muted">Informasi terupdate secara langsung</p>
+                                        </div>
+                                    </div>
                                 </div>
-                                <h3 class="fs-5 fw-bold mb-3">Misi Kami</h3>
-                                <p class="mb-0">Menyediakan platform yang mudah digunakan, aman, dan efisien untuk
-                                    mengelola informasi desa, meningkatkan partisipasi warga, dan mendukung pembangunan
-                                    desa yang berkelanjutan.</p>
+
+                                <p class="mb-0">
+                                    Dengan Binadesa, kami berkomitmen untuk menciptakan desa yang lebih transparan,
+                                    efisien, dan terkoneksi dengan baik antara pemerintah desa dan masyarakat.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Visi dan Misi -->
+                    <div class="row g-4 mt-5">
+                        <div class="col-md-6" data-aos="fade-up" data-aos-delay="500">
+                            <div class="vision-mission-card p-4 rounded-4 h-100">
+                                <div class="d-flex align-items-start mb-4">
+                                    <div class="icon-wrapper me-3">
+                                        <div class="icon bg-primary bg-opacity-10 p-3 rounded-circle d-flex align-items-center justify-content-center">
+                                            <i class="bi bi-eye fs-3 text-primary"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h3 class="fw-bold mb-3">Visi Kami</h3>
+                                        <p class="mb-0">
+                                            Menjadi platform digital terdepan dalam menghubungkan warga dengan
+                                            informasi dan layanan desa, menciptakan masyarakat desa yang modern, transparan, dan
+                                            sejahtera melalui teknologi inovatif.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6" data-aos="fade-up" data-aos-delay="600">
+                            <div class="vision-mission-card p-4 rounded-4 h-100">
+                                <div class="d-flex align-items-start mb-4">
+                                    <div class="icon-wrapper me-3">
+                                        <div class="icon bg-success bg-opacity-10 p-3 rounded-circle d-flex align-items-center justify-content-center">
+                                            <i class="bi bi-bullseye fs-3 text-success"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h3 class="fw-bold mb-3">Misi Kami</h3>
+                                        <ul class="mb-0 ps-3">
+                                            <li class="mb-2">Menyediakan platform yang mudah digunakan, aman, dan efisien</li>
+                                            <li class="mb-2">Meningkatkan partisipasi warga dalam pembangunan desa</li>
+                                            <li class="mb-2">Mendukung transparansi pengelolaan desa</li>
+                                            <li class="mb-0">Mendorong pembangunan desa yang berkelanjutan</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Nilai-nilai -->
+                    <div class="row mt-5">
+                        <div class="col-12">
+                            <div class="text-center" data-aos="fade-up" data-aos-delay="700">
+                                <h3 class="mb-4 fw-bold">Nilai-Nilai Kami</h3>
+                                <div class="row g-4">
+                                    <div class="col-md-3">
+                                        <div class="value-card p-4 rounded-4 text-center h-100">
+                                            <div class="value-icon mb-3">
+                                                <i class="bi bi-shield-check fs-1 text-primary"></i>
+                                            </div>
+                                            <h5 class="fw-bold mb-2">Transparansi</h5>
+                                            <p class="mb-0 text-muted">Informasi terbuka dan dapat dipertanggungjawabkan</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="value-card p-4 rounded-4 text-center h-100">
+                                            <div class="value-icon mb-3">
+                                                <i class="bi bi-people fs-1 text-success"></i>
+                                            </div>
+                                            <h5 class="fw-bold mb-2">Kolaborasi</h5>
+                                            <p class="mb-0 text-muted">Kerjasama antara pemerintah dan masyarakat</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="value-card p-4 rounded-4 text-center h-100">
+                                            <div class="value-icon mb-3">
+                                                <i class="bi bi-lightning fs-1 text-warning"></i>
+                                            </div>
+                                            <h5 class="fw-bold mb-2">Inovasi</h5>
+                                            <p class="mb-0 text-muted">Terus berkembang dengan teknologi terbaru</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="value-card p-4 rounded-4 text-center h-100">
+                                            <div class="value-icon mb-3">
+                                                <i class="bi bi-heart fs-1 text-danger"></i>
+                                            </div>
+                                            <h5 class="fw-bold mb-2">Peduli</h5>
+                                            <p class="mb-0 text-muted">Prioritaskan kebutuhan masyarakat desa</p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -584,6 +713,308 @@
                 </div>
             </section>
             <!-- End Contact-->
+
+            <!-- ======= Developers Section =======-->
+            <section class="section developers-section" id="developers" style="background-color: #f8f9fa;">
+                <div class="container">
+                    <div class="row mb-5">
+                        <div class="col-md-8 mx-auto text-center">
+                            <h2 class="section-title text-center mb-3" data-aos="fade-up" data-aos-delay="100">
+                                Identitas Pengembang Platform portal desa</h2>
+                            <p class="mb-0" data-aos="fade-up" data-aos-delay="200">
+                                Platform ini dikembangkan oleh mahasiswa yang berdedikasi untuk memajukan desa melalui teknologi.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8 col-xl-7">
+                            <div class="developer-card" data-aos="fade-up" data-aos-delay="300">
+                                <div class="row align-items-center g-4">
+                                    <div class="col-md-4 text-center">
+                                        <!-- Ganti dengan foto asli Anda -->
+                                        <div class="developer-photo mb-3">
+                                            <img src="{{ asset('assets-guest/images/hafizh.jpeg') }}"
+                                                 alt="Foto Pengembang"
+                                                 class="img-fluid rounded-circle border border-4 border-white shadow"
+                                                 style="width: 200px; height: 200px; object-fit: cover;">
+                                        </div>
+                                        <div class="developer-social mb-3">
+                                            <a href="https://linkedin.com/in/alhafizh" target="_blank" class="social-icon linkedin"
+                                               data-bs-toggle="tooltip" title="LinkedIn">
+                                                <i class="bi bi-linkedin"></i>
+                                            </a>
+                                            <a href="https://github.com/alhafizh24si-maker" target="_blank" class="social-icon github"
+                                               data-bs-toggle="tooltip" title="GitHub">
+                                                <i class="bi bi-github"></i>
+                                            </a>
+                                            <a href="https://instagram.com/_anugrah.alhfzh" target="_blank" class="social-icon instagram"
+                                               data-bs-toggle="tooltip" title="Instagram">
+                                                <i class="bi bi-instagram"></i>
+                                            </a>
+                                            <a href="https://twitter.com/alhafizh" target="_blank" class="social-icon twitter"
+                                               data-bs-toggle="tooltip" title="Twitter/X">
+                                                <i class="bi bi-twitter-x"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-8">
+                                        <div class="developer-info">
+                                            <h3 class="developer-name mb-2">Muhammad Anugrah Alhafizh</h3>
+                                            <p class="developer-nim text-muted mb-3">
+                                                <i class="bi bi-person-badge me-2"></i>
+                                                NIM: 2457301087
+                                            </p>
+                                            <p class="developer-program text-muted mb-4">
+                                                <i class="bi bi-mortarboard me-2"></i>
+                                                Program Studi: Sistem Informasi
+                                            </p>
+
+                                            <div class="developer-details">
+                                                <div class="detail-item mb-3">
+                                                    <h5 class="detail-title">
+                                                        <i class="bi bi-building me-2"></i>
+                                                        Institusi
+                                                    </h5>
+                                                    <p class="detail-content mb-0">POLITEKNIK CALTEX RIAU</p>
+                                                </div>
+
+                                                <div class="detail-item mb-3">
+                                                    <h5 class="detail-title">
+                                                        <i class="bi bi-envelope me-2"></i>
+                                                        Email
+                                                    </h5>
+                                                    <p class="detail-content mb-0">anugrahalhafizh@gmail.com</p>
+                                                </div>
+
+                                                <div class="detail-item">
+                                                    <h5 class="detail-title">
+                                                        <i class="bi bi-info-circle me-2"></i>
+                                                        Tentang Pengembang
+                                                    </h5>
+                                                    <p class="detail-content mb-0">
+                                                        Mahasiswa yang passionate tentang teknologi dan pembangunan desa.
+                                                        Mengembangkan Platform ini sebagai wujud kontribusi dalam memajukan
+                                                        desa melalui digitalisasi.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- End Developers Section-->
         </main>
     </div>
+
+    <!-- Custom CSS untuk About Section yang diperbarui -->
+    <style>
+        /* Styling untuk About Section */
+        .about-image {
+            position: relative;
+            overflow: hidden;
+            border-radius: 20px;
+        }
+
+        .about-image img {
+            transition: transform 0.5s ease;
+        }
+
+        .about-image:hover img {
+            transform: scale(1.05);
+        }
+
+        .overlay-text {
+            background: linear-gradient(transparent, rgba(0,0,0,0.7));
+            width: 100%;
+        }
+
+        .vision-mission-card {
+            background: white;
+            border: 1px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .vision-mission-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-color: #007bff;
+        }
+
+        .vision-mission-card .icon-wrapper .icon {
+            width: 60px;
+            height: 60px;
+        }
+
+        .value-card {
+            background: white;
+            border: 1px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .value-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .value-card .value-icon i {
+            transition: transform 0.3s ease;
+        }
+
+        .value-card:hover .value-icon i {
+            transform: scale(1.2);
+        }
+
+        .about-features .d-flex {
+            padding: 10px;
+            border-radius: 10px;
+            background-color: #f8f9fa;
+            transition: background-color 0.3s ease;
+        }
+
+        .about-features .d-flex:hover {
+            background-color: #e9ecef;
+        }
+
+        /* Responsif untuk About Section */
+        @media (max-width: 768px) {
+            .about-content {
+                text-align: center;
+            }
+
+            .vision-mission-card {
+                margin-bottom: 20px;
+            }
+
+            .value-card {
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+
+    <!-- Custom CSS untuk Developers Section -->
+    <style>
+        .developers-section {
+            padding: 80px 0;
+        }
+
+        .developer-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .developer-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .developer-photo img {
+            transition: transform 0.3s ease;
+        }
+
+        .developer-photo img:hover {
+            transform: scale(1.05);
+        }
+
+        .developer-social {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+        }
+
+        .social-icon:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .social-icon.linkedin {
+            background-color: #0077b5;
+        }
+
+        .social-icon.github {
+            background-color: #333;
+        }
+
+        .social-icon.instagram {
+            background: linear-gradient(45deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D);
+        }
+
+        .social-icon.twitter {
+            background-color: #000000;
+        }
+
+        .developer-name {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        .developer-nim, .developer-program {
+            font-size: 1.1rem;
+        }
+
+        .detail-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+
+        .detail-content {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .detail-item {
+            padding-left: 10px;
+            border-left: 3px solid #007bff;
+        }
+    </style>
+
+    <!-- JavaScript untuk tooltips -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inisialisasi tooltips
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+
+            // Animasi counter untuk developers section
+            const developerSection = document.getElementById('developers');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // Tambahkan animasi jika diperlukan
+                        entry.target.classList.add('animated');
+                    }
+                });
+            }, { threshold: 0.3 });
+
+            if (developerSection) {
+                observer.observe(developerSection);
+            }
+        });
+    </script>
 @endsection

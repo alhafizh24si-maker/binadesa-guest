@@ -545,10 +545,9 @@
     @section('content')
 
     <!-- ======= Header Section ======= -->
-    <div class="page-header" style="padding-top: 250px; padding-bottom: 100px;">
+    <div class="page-header" style="padding-top: 150px; padding-bottom: 100px;">
         <div class="container">
             <div class="text-center">
-                <span class="subtitle" data-aos="fade-up">Berita</span>
                 <h2 data-aos="fade-up" data-aos-delay="100">Daftar Berita</h2>
                 <p data-aos="fade-up" data-aos-delay="200">Kelola semua berita yang telah dipublikasikan dalam sistem.</p>
             </div>

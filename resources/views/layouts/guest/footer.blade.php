@@ -7,7 +7,7 @@
                      document.write(new Date().getFullYear());
                  </script> Binadesa.
                  All rights reserved. Designed with <i class="bi bi-heart-fill text-danger"></i> by <a
-                     href="https://freebootstrap.net">FreeBootstrap.net</a>
+                     href="https://freebootstrap.net">Hafizh</a>
              </div>
          </div>
      </div>
