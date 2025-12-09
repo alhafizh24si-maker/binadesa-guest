@@ -26,8 +26,7 @@
                     <div class="row justify-content-center">
                         <div class="col-lg-8">
                             <div class="form-wrapper" data-aos="fade-up" data-aos-delay="300">
-                                <form action="{{ route('user.update', $user->id) }}" method="POST"
-                                    class="p-5 rounded-4"
+                                <form action="{{ route('user.update', $user->id) }}" method="POST" class="p-5 rounded-4"
                                     style="background: var(--bs-body-bg); border: 1px solid var(--bs-border-color);">
                                     @method('PUT')
                                     @csrf
@@ -55,6 +54,31 @@
                                             @error('email')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
+                                        </div>
+                                    </div>
+
+                                    <!-- Tambahkan setelah bagian email -->
+                                    <div class="row gap-3 mb-4">
+                                        <div class="col-md-12">
+                                            <label class="mb-2 fw-bold" for="role">Role <span
+                                                    class="text-danger">*</span></label>
+                                            <select class="form-select @error('role') is-invalid @enderror" id="role"
+                                                name="role" required>
+                                                <option value="" disabled>Pilih role user</option>
+                                                <option value="Super Admin"
+                                                    {{ old('role', $user->role) == 'Super Admin' ? 'selected' : '' }}>Super
+                                                    Admin</option>
+                                                <option value="Admin"
+                                                    {{ old('role', $user->role) == 'Admin' ? 'selected' : '' }}>Admin
+                                                </option>
+                                                <option value="Guest"
+                                                    {{ old('role', $user->role) == 'Guest' ? 'selected' : '' }}>Guest
+                                                </option>
+                                            </select>
+                                            @error('role')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                            <small class="text-muted">Hak akses user dalam sistem</small>
                                         </div>
                                     </div>
 

@@ -12,23 +12,30 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-       $query = User::query();
+        $query = User::query();
 
-    // Search functionality
-    if ($request->has('search') && $request->search != '') {
-        $search = $request->search;
-        $query->where(function($q) use ($search) {
-            $q->where('name', 'like', '%' . $search . '%')
-              ->orWhere('email', 'like', '%' . $search . '%');
-        });
-    }
-     if ($request->has('filter_name') && $request->filter_name != '') {
+        // Search functionality
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('email', 'like', '%' . $search . '%');
+            });
+        }
+
+        // Filter by name
+        if ($request->has('filter_name') && $request->filter_name != '') {
             $query->where('name', 'like', '%' . $request->filter_name . '%');
         }
 
-    $dataUser = $query->orderBy('created_at', 'desc')->paginate(12);
+        // Filter by role
+        if ($request->has('filter_role') && $request->filter_role != '') {
+            $query->where('role', $request->filter_role);
+        }
 
-    return view('pages.users.index', compact('dataUser'));
+        $dataUser = $query->orderBy('created_at', 'desc')->paginate(12);
+
+        return view('pages.users.index', compact('dataUser'));
     }
 
     /**
@@ -48,6 +55,7 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:8|confirmed',
+            'role' => 'required|in:Super Admin,Admin,Guest',
         ]);
 
         try {
@@ -56,6 +64,7 @@ class UserController extends Controller
                 'email' => $request->email,
                 'password' => bcrypt($request->password),
                 'plain_password' => $request->password, // Simpan password plain jika diperlukan
+                'role' => $request->role,
             ]);
 
             return redirect()->route('user.index')
@@ -82,7 +91,7 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-         $user = User::findOrFail($id); // atau cara lain sesuai model Anda
+        $user = User::findOrFail($id);
         return view('pages.users.edit', compact('user'));
     }
 
@@ -97,12 +106,14 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $id,
             'password' => 'nullable|min:8|confirmed',
+            'role' => 'required|in:Super Admin,Admin,Guest',
         ]);
 
         try {
             $data = [
                 'name' => $request->name,
                 'email' => $request->email,
+                'role' => $request->role,
             ];
 
             // Update password hanya jika diisi

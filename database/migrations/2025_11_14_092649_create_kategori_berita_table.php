@@ -6,9 +6,12 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     */
     public function up(): void
     {
-        Schema::create('kategori_berita', function (Blueprint $table) {
+       Schema::create('kategori_berita', function (Blueprint $table) {
             $table->id('kategori_id');
             $table->string('nama', 100);
             $table->string('slug', 120)->unique();

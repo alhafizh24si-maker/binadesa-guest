@@ -19,6 +19,36 @@
                     </div>
                 </div>
 
+                <!-- Debug Errors -->
+                @if ($errors->any())
+                    <div class="row justify-content-center mb-4">
+                        <div class="col-lg-10">
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <h5 class="alert-heading"><i class="bi bi-exclamation-triangle me-2"></i> Terjadi Kesalahan!</h5>
+                                <ul class="mb-0">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
+                <!-- Success Message -->
+                @if (session('success'))
+                    <div class="row justify-content-center mb-4">
+                        <div class="col-lg-10">
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <i class="bi bi-check-circle me-2"></i>
+                                {{ session('success') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
                 <div class="row justify-content-center">
                     <div class="col-lg-10">
                         <div class="form-wrapper" data-aos="fade-up" data-aos-delay="300">
@@ -36,10 +66,10 @@
                                         <select class="form-select @error('kategori_id') is-invalid @enderror"
                                                 id="kategori_id" name="kategori_id" required>
                                             <option value="">Pilih Kategori</option>
-                                            @foreach($kategori as $kat)
+                                            @foreach($kategoriBerita as $kat)
                                                 <option value="{{ $kat->kategori_id }}"
                                                     {{ old('kategori_id', $berita->kategori_id) == $kat->kategori_id ? 'selected' : '' }}>
-                                                    {{ $kat->nama }}
+                                                    {{ $kat->nama_kategori ?? $kat->nama }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -75,6 +105,24 @@
                                     </div>
                                 </div>
 
+                                <!-- TAMBAHKAN INPUT SLUG -->
+                                <div class="row gap-3 mb-4">
+                                    <div class="col-md-12">
+                                        <label class="mb-2 fw-bold" for="slug">Slug URL <span
+                                                class="text-danger">*</span></label>
+                                        <input class="form-control @error('slug') is-invalid @enderror"
+                                               id="slug" type="text" name="slug"
+                                               value="{{ old('slug', $berita->slug) }}"
+                                               placeholder="Slug akan otomatis digenerate dari judul" required>
+                                        @error('slug')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                        <div class="form-text">
+                                            URL-friendly version of the title. Auto-generated from title.
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div class="row gap-3 mb-4">
                                     <div class="col-md-12">
                                         <label class="mb-2 fw-bold" for="isi_html">Isi Berita <span
@@ -92,13 +140,28 @@
                                     <div class="col-md-6">
                                         <label class="mb-2 fw-bold" for="cover_foto">Cover/Foto Berita</label>
 
-                                        @if($berita->cover_foto)
+                                        <!-- PERBAIKI TAMPILAN COVER -->
+                                        @if($cover)
+                                            <div class="mb-3">
+                                                <img src="{{ asset('storage/' . $cover->file_url) }}"
+                                                     alt="Cover saat ini"
+                                                     class="img-thumbnail rounded"
+                                                     style="max-width: 200px; max-height: 150px; object-fit: cover;">
+                                                <div class="form-text mt-1">Cover saat ini</div>
+                                                @if($cover->caption)
+                                                    <small class="text-muted">Caption: {{ $cover->caption }}</small>
+                                                @endif
+                                            </div>
+                                            <!-- Input hidden untuk cover caption -->
+                                            <input type="hidden" name="cover_caption" value="{{ $cover->caption ?? '' }}">
+                                        @elseif($berita->cover_foto)
+                                            <!-- Fallback untuk data lama -->
                                             <div class="mb-3">
                                                 <img src="{{ asset('storage/' . $berita->cover_foto) }}"
                                                      alt="Cover saat ini"
                                                      class="img-thumbnail rounded"
                                                      style="max-width: 200px; max-height: 150px; object-fit: cover;">
-                                                <div class="form-text mt-1">Cover saat ini</div>
+                                                <div class="form-text mt-1">Cover saat ini (data lama)</div>
                                             </div>
                                         @endif
 
@@ -109,7 +172,7 @@
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                         <div class="form-text mt-2">
-                                            Biarkan kosong jika tidak ingin mengubah cover. Format: JPEG, PNG, JPG, GIF. Maksimal 2MB.
+                                            Biarkan kosong jika tidak ingin mengubah cover. Format: JPEG, PNG, JPG, GIF, WEBP. Maksimal 5MB.
                                         </div>
                                     </div>
 
@@ -139,6 +202,42 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <!-- Gallery Section (Opsional) -->
+                                @if($gallery->count() > 0)
+                                    <div class="row gap-3 mb-4">
+                                        <div class="col-md-12">
+                                            <label class="mb-2 fw-bold">Galeri Foto Saat Ini</label>
+                                            <div class="row g-3">
+                                                @foreach($gallery as $media)
+                                                    <div class="col-md-3">
+                                                        <div class="card border-0 shadow-sm">
+                                                            <img src="{{ asset('storage/' . $media->file_url) }}"
+                                                                 class="card-img-top"
+                                                                 alt="{{ $media->caption }}"
+                                                                 style="height: 120px; object-fit: cover;">
+                                                            <div class="card-body p-3">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="checkbox"
+                                                                           name="delete_gallery[]"
+                                                                           value="{{ $media->media_id }}"
+                                                                           id="delete_{{ $media->media_id }}">
+                                                                    <label class="form-check-label small" for="delete_{{ $media->media_id }}">
+                                                                        Hapus gambar ini
+                                                                    </label>
+                                                                </div>
+                                                                <input type="text" class="form-control form-control-sm mt-2"
+                                                                       name="media_captions[{{ $media->media_id }}]"
+                                                                       value="{{ old('media_captions.' . $media->media_id, $media->caption) }}"
+                                                                       placeholder="Caption">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
 
                                 <div class="row gap-3 mb-4">
                                     <div class="col-md-12">
@@ -202,14 +301,21 @@
 
                 if (judulInput && slugInput) {
                     judulInput.addEventListener('input', function() {
-                        // Simple slug generation (you might want to use a more robust solution)
+                        // Simple slug generation
                         const slug = judulInput.value
                             .toLowerCase()
-                            .replace(/[^\w ]+/g, '')
-                            .replace(/ +/g, '-');
+                            .replace(/[^\w\s]/g, '')
+                            .replace(/\s+/g, '-')
+                            .replace(/--+/g, '-');
                         slugInput.value = slug;
                     });
                 }
+
+                // Tampilkan error validation
+                @if($errors->any())
+                    // Scroll ke atas untuk melihat error
+                    window.scrollTo(0, 0);
+                @endif
             });
         </script>
         @endpush

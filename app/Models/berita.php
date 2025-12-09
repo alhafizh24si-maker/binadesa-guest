@@ -1,7 +1,7 @@
 <?php
-
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -9,9 +9,9 @@ class Berita extends Model
 {
     use HasFactory;
 
-    protected $table = 'berita';
+    protected $table      = 'berita';
     protected $primaryKey = 'berita_id';
-    public $timestamps = true;
+    public $timestamps    = true;
 
     protected $fillable = [
         'kategori_id',
@@ -21,11 +21,11 @@ class Berita extends Model
         'penulis',
         'cover_foto',
         'status',
-        'terbit_at'
+        'terbit_at',
     ];
 
     protected $casts = [
-        'terbit_at' => 'datetime'
+        'terbit_at' => 'datetime',
     ];
 
     public function kategori()
@@ -33,122 +33,62 @@ class Berita extends Model
         return $this->belongsTo(KategoriBerita::class, 'kategori_id', 'kategori_id');
     }
 
+    /**
+     * Relationship dengan media - BARU DITAMBAHKAN
+     */
+    public function media()
+    {
+        return $this->hasMany(Media::class, 'ref_id', 'berita_id')
+            ->where('ref_table', 'berita')
+            ->orderBy('sort_order')
+            ->orderBy('media_id');
+    }
+
+    /**
+     * Accessor untuk cover foto - BARU DITAMBAHKAN
+     * Menggunakan file_name dari tabel media
+     */
+    public function getCoverFotoAttribute()
+    {
+        $cover = $this->media->where('sort_order', 1)->first();
+        return $cover ? $cover->file_name : null;
+    }
+
+    /**
+     * Accessor untuk URL cover foto
+     */
+    public function getCoverFotoUrlAttribute()
+    {
+        $cover = $this->media->where('sort_order', 1)->first();
+        return $cover ? asset('storage/media/berita/' . $cover->file_name) : null;
+    }
+
+    /**
+     * Accessor untuk gambar pendukung - BARU DITAMBAHKAN
+     */
+    public function getGambarPendukungAttribute()
+    {
+        return $this->media->where('sort_order', '>', 1);
+    }
+
+    public function scopeFilter(Builder $query, $request, array $filterableColumns): Builder
+    {
+        foreach ($filterableColumns as $column) {
+            if ($request->filled($column)) {
+                $query->where($column, $request->input($column));
+            }
+        }
+        return $query;
+    }
+
     public function scopeSearch($query, $request, array $columns)
     {
         if ($request->filled('search')) {
-            $query->where(function($q) use ($request, $columns) {
+            $query->where(function ($q) use ($request, $columns) {
                 foreach ($columns as $column) {
                     $q->orWhere($column, 'LIKE', '%' . $request->search . '%');
                 }
             });
         }
-    }
-
-    /**
-     * Scope untuk filter status
-     */
-    public function scopeFilterStatus($query, $status)
-    {
-        if ($status && $status !== 'semua') {
-            $query->where('status', $status);
-        }
-        return $query;
-    }
-
-    /**
-     * Scope untuk berita yang sudah terbit
-     */
-    public function scopeTerbit($query)
-    {
-        return $query->where('status', 'terbit');
-    }
-
-    /**
-     * Scope untuk berita draft
-     */
-    public function scopeDraft($query)
-    {
-        return $query->where('status', 'draft');
-    }
-
-    /**
-     * Get the route key for the model.
-     */
-    public function getRouteKeyName()
-    {
-        return 'slug';
-    }
-
-    /**
-     * Accessor untuk cover foto URL
-     */
-    public function getCoverFotoUrlAttribute()
-    {
-        if ($this->cover_foto) {
-            return asset('storage/' . $this->cover_foto);
-        }
-        return null;
-    }
-
-    /**
-     * Accessor untuk status label
-     */
-    public function getStatusLabelAttribute()
-    {
-        $statuses = [
-            'draft' => 'Draft',
-            'terbit' => 'Terbit'
-        ];
-
-        return $statuses[$this->status] ?? $this->status;
-    }
-
-    /**
-     * Accessor untuk status badge class
-     */
-    public function getStatusBadgeClassAttribute()
-    {
-        $classes = [
-            'draft' => 'bg-warning text-dark',
-            'terbit' => 'bg-success'
-        ];
-
-        return $classes[$this->status] ?? 'bg-secondary';
-    }
-
-    /**
-     * Check if berita is published
-     */
-    public function isPublished()
-    {
-        return $this->status === 'terbit';
-    }
-
-    /**
-     * Check if berita is draft
-     */
-    public function isDraft()
-    {
-        return $this->status === 'draft';
-    }
-
-    /**
-     * Get formatted terbit_at date
-     */
-    public function getTerbitAtFormattedAttribute()
-    {
-        return $this->terbit_at ? $this->terbit_at->format('d M Y H:i') : '-';
-    }
-
-    /**
-     * Get short excerpt from isi_html
-     */
-    public function getExcerptAttribute($length = 150)
-    {
-        $text = strip_tags($this->isi_html);
-        if (strlen($text) > $length) {
-            return substr($text, 0, $length) . '...';
-        }
-        return $text;
     }
 }

@@ -1,11 +1,12 @@
 <?php
+
 namespace App\Http\Controllers;
 
-use App\Models\Berita;
-use App\Models\KategoriBerita;
 use Illuminate\Http\Request;
+use App\Models\KategoriBerita;
+use App\Models\Berita;
+use App\Models\Media;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 class BeritaController extends Controller
 {
@@ -13,42 +14,35 @@ class BeritaController extends Controller
      * Display a listing of the resource.
      */
     public function index(Request $request)
-    {
-        $filterableColumns = ['status'];
+{
+    // Daftar kolom yang bisa difilter sesuai name pada form
+    $filterableColumns = ['status']; // Filter berdasarkan status
+    $searchableColumns = ['judul', 'penulis']; // Search berdasarkan judul dan penulis
 
-        $query = Berita::with('kategori');
+    // Gunakan query() untuk memastikan chain method bekerja dengan benar
+    $dataBerita = Berita::query()
+        ->with(['kategori', 'media'])
+        ->filter($request, $filterableColumns)
+        ->search($request, $searchableColumns)
+        ->orderBy('created_at', 'desc')
+        ->paginate(10)
+        ->withQueryString();
 
-    // Search functionality
-    if ($request->has('search') && $request->search != '') {
-        $search = $request->search;
-        $query->where(function($q) use ($search) {
-            $q->where('judul', 'like', '%' . $search . '%')
-              ->orWhere('penulis', 'like', '%' . $search . '%')
-              ->orWhere('isi_html', 'like', '%' . $search . '%')
-              ->orWhere('slug', 'like', '%' . $search . '%');
-        });
-    }
-     if ($request->has('status') && $request->status != '' && $request->status != 'semua') {
-            $query->where('status', $request->status);
-        }
-
-    $berita = $query->orderBy('created_at', 'desc')->paginate(6);
-
-    // Count statistics
+    // Hitung statistik - PERBAIKI INI
     $publishedCount = Berita::where('status', 'terbit')->count();
     $draftCount = Berita::where('status', 'draft')->count();
-    $categoryCount = Berita::distinct('kategori_id')->count('kategori_id');
+    $categoryCount = KategoriBerita::count(); // Ini lebih tepat untuk jumlah kategori
 
-        return view('pages.berita.index', compact('berita', 'publishedCount', 'draftCount', 'categoryCount'));
-    }
+    return view('pages.berita.index', compact('dataBerita', 'publishedCount', 'draftCount', 'categoryCount'));
+}
 
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        $kategori = Kategoriberita::all();
-        return view('pages.berita.create', compact('kategori'));
+        $data['kategoriBerita'] = KategoriBerita::all();
+        return view('pages.berita.create', $data);
     }
 
     /**
@@ -58,135 +52,271 @@ class BeritaController extends Controller
     {
         $request->validate([
             'kategori_id' => 'required|exists:kategori_berita,kategori_id',
-            'judul'       => 'required|string|max:255',
-            'isi_html'    => 'required|string',
-            'penulis'     => 'required|string|max:100',
-            'cover_foto'  => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'status'      => 'required|in:draft,terbit',
-            'terbit_at'   => 'nullable|date',
+            'judul' => 'required|string|max:255',
+            'slug' => 'required|string|max:300|unique:berita,slug',
+            'isi_html' => 'required|string',
+            'penulis' => 'required|string|max:100',
+            'cover_foto' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
+            'gambar_pendukung' => 'nullable|array',
+            'gambar_pendukung.*' => 'image|mimes:jpg,jpeg,png,gif|max:2048',
+            'status' => 'required|in:draft,terbit',
+            'terbit_at' => 'nullable|date',
         ]);
 
-        // Generate slug from judul
-        $slug = Str::slug($request->judul);
+        $data = $request->except(['cover_foto', 'gambar_pendukung']);
 
-        // Check if slug already exists
-        $counter      = 1;
-        $originalSlug = $slug;
-        while (Berita::where('slug', $slug)->exists()) {
-            $slug = $originalSlug . '-' . $counter;
-            $counter++;
+        // Jika status terbit dan terbit_at kosong, set terbit_at ke waktu sekarang
+        if ($request->status == 'terbit' && empty($request->terbit_at)) {
+            $data['terbit_at'] = now();
         }
 
-        $berita              = new Berita();
-        $berita->kategori_id = $request->kategori_id;
-        $berita->judul       = $request->judul;
-        $berita->slug        = $slug;
-        $berita->isi_html    = $request->isi_html;
-        $berita->penulis     = $request->penulis;
-        $berita->status      = $request->status;
-        $berita->terbit_at   = $request->terbit_at;
+        $berita = Berita::create($data);
 
-        // Handle cover foto upload
-        if ($request->hasFile('cover_foto')) {
-            $coverPath          = $request->file('cover_foto')->store('berita/cover', 'public');
-            $berita->cover_foto = $coverPath;
+        // Upload cover foto jika ada
+        if ($request->hasFile('cover_foto') && $request->file('cover_foto')->isValid()) {
+            $this->uploadCoverFoto($request->file('cover_foto'), $berita->berita_id);
         }
 
-        $berita->save();
+        // Upload gambar pendukung jika ada
+        if ($request->hasFile('gambar_pendukung')) {
+            $this->uploadGambarPendukung($request->file('gambar_pendukung'), $berita->berita_id);
+        }
 
-        return redirect()->route('berita.index')
-            ->with('success', 'Berita berhasil ditambahkan.');
+        return redirect()->route('berita.index')->with('success', 'Penambahan Data Berhasil!');
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        $data['berita'] = Berita::with(['kategori', 'media'])->findOrFail($id);
+        return view('pages.berita.show', $data);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)
-    {
-        $berita   = Berita::findOrFail($id);
-        $kategori = KategoriBerita::all();
-        return view('pages.berita.edit', compact('berita', 'kategori')); // PERBAIKAN: tambah 'pages.'
-    }
+    /**
+ * Show the form for editing the specified resource.
+ */
+public function edit(string $id)
+{
+    $data['berita'] = Berita::with(['kategori', 'media' => function($query) {
+        $query->orderBy('sort_order', 'asc');
+    }])->findOrFail($id);
 
+    $data['kategoriBerita'] = KategoriBerita::all();
+
+    // Pisahkan cover dan gallery untuk edit
+    $data['cover'] = $data['berita']->media->where('sort_order', 1)->first();
+    $data['gallery'] = $data['berita']->media->where('sort_order', '>', 1)->sortBy('sort_order');
+
+    return view('pages.berita.edit', $data);
+}
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, string $id)
     {
-        $request->validate([
-            'kategori_id' => 'required|exists:kategori_berita,kategori_id',
-            'judul'       => 'required|string|max:255',
-            'isi_html'    => 'required|string',
-            'penulis'     => 'required|string|max:100',
-            'cover_foto'  => 'nullable|file|max:102400', // Terima semua jenis file
-            'status'      => 'required|in:draft,terbit',
-            'terbit_at'   => 'nullable|date',
-        ], [
-            'cover_foto.file' => 'File harus berupa file yang valid',
-            'cover_foto.max'  => 'Ukuran file maksimal 100 MB',
-        ]);
-
         $berita = Berita::findOrFail($id);
 
-        // Generate slug from judul if judul changed
-        if ($berita->judul != $request->judul) {
-            $slug = Str::slug($request->judul);
+        $request->validate([
+            'kategori_id' => 'required|exists:kategori_berita,kategori_id',
+            'judul' => 'required|string|max:250',
+            'slug' => 'required|string|max:300|unique:berita,slug,' . $id . ',berita_id',
+            'isi_html' => 'required|string',
+            'penulis' => 'required|string|max:100',
+            'cover_foto' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
+            'gambar_pendukung' => 'nullable|array',
+            'gambar_pendukung.*' => 'image|mimes:jpg,jpeg,png,gif|max:2048',
+            'status' => 'required|in:draft,terbit',
+            'terbit_at' => 'nullable|date',
+        ]);
 
-            // Check if slug already exists
-            $counter      = 1;
-            $originalSlug = $slug;
-            while (Berita::where('slug', $slug)->where('berita_id', '!=', $id)->exists()) {
-                $slug = $originalSlug . '-' . $counter;
-                $counter++;
-            }
-            $berita->slug = $slug;
+        $data = $request->except(['cover_foto', 'gambar_pendukung']);
+
+        // Jika status berubah dari draft ke terbit dan terbit_at kosong, set terbit_at ke waktu sekarang
+        if ($request->status == 'terbit' && $berita->status == 'draft' && empty($request->terbit_at)) {
+            $data['terbit_at'] = now();
         }
 
-        $berita->kategori_id = $request->kategori_id;
-        $berita->judul       = $request->judul;
-        $berita->isi_html    = $request->isi_html;
-        $berita->penulis     = $request->penulis;
-        $berita->status      = $request->status;
+        $berita->update($data);
 
-        // Set terbit_at berdasarkan status
-        if ($request->status == 'terbit' && ! $berita->terbit_at) {
-            $berita->terbit_at = $request->terbit_at ?: now();
-        } else {
-            $berita->terbit_at = $request->terbit_at;
+        // Upload cover foto baru jika ada
+        if ($request->hasFile('cover_foto') && $request->file('cover_foto')->isValid()) {
+            // Hapus cover foto lama jika ada
+            $this->deleteCoverFoto($berita->berita_id);
+            // Upload cover foto baru
+            $this->uploadCoverFoto($request->file('cover_foto'), $berita->berita_id);
         }
 
-        // Handle cover foto upload
-        if ($request->hasFile('cover_foto')) {
-            // Delete old cover foto if exists
-            if ($berita->cover_foto && Storage::disk('public')->exists($berita->cover_foto)) {
-                Storage::disk('public')->delete($berita->cover_foto);
-            }
-
-            $coverPath          = $request->file('cover_foto')->store('berita/cover', 'public');
-            $berita->cover_foto = $coverPath;
+        // Upload gambar pendukung baru jika ada
+        if ($request->hasFile('gambar_pendukung')) {
+            $this->uploadGambarPendukung($request->file('gambar_pendukung'), $berita->berita_id);
         }
 
-        $berita->save();
-
-        return redirect()->route('berita.index')
-            ->with('success', 'Berita berhasil diperbarui.');
+        return redirect()->route('berita.index')->with('success','Data Berhasil Diupdate!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(string $id)
     {
         $berita = Berita::findOrFail($id);
 
-        // Delete cover foto if exists
-        if ($berita->cover_foto && Storage::disk('public')->exists($berita->cover_foto)) {
-            Storage::disk('public')->delete($berita->cover_foto);
-        }
+        // Hapus semua file terkait berita ini
+        $this->deleteAllFiles($berita->berita_id);
 
         $berita->delete();
 
-        return redirect()->route('berita.index')
-            ->with('success', 'Berita berhasil dihapus.');
+        return redirect()->route('berita.index')->with('success', 'Data berhasil dihapus');
     }
+
+    /**
+     * Upload cover foto
+     */
+    private function uploadCoverFoto($file, $beritaId)
+    {
+        // Generate unique filename
+        $filename = 'cover-berita-' . $beritaId . '-' . time() . '.' . $file->getClientOriginalExtension();
+
+        // PERUBAHAN: Store file - simpan di folder 'media/berita' (FOLDER BARU)
+        $file->storeAs('media/berita', $filename, 'public');
+
+        // Simpan ke tabel media dengan struktur yang baru
+        Media::create([
+            'ref_table'     => 'berita',
+            'ref_id'        => $beritaId,
+            'file_name'     => $filename,
+            'mime_type'     => $file->getMimeType(),
+            'caption'       => 'Cover Berita',
+            'sort_order'    => 1,
+        ]);
+    }
+      public function uploadGallery(Request $request, string $id)
+    {
+        $berita = Berita::findOrFail($id);
+
+        $request->validate([
+            'gambar_pendukung' => 'required|array|min:1',
+            'gambar_pendukung.*' => 'image|mimes:jpg,jpeg,png,gif|max:2048',
+        ]);
+
+        \Log::info('Upload gallery started', [
+            'berita_id' => $id,
+            'files_count' => $request->hasFile('gambar_pendukung') ? count($request->file('gambar_pendukung')) : 0
+        ]);
+
+        // Upload gambar pendukung baru jika ada
+        if ($request->hasFile('gambar_pendukung')) {
+            $files = $request->file('gambar_pendukung');
+            \Log::info('Files received:', ['count' => count($files)]);
+
+            $this->uploadGambarPendukung($files, $berita->berita_id);
+
+            return redirect()->route('berita.show', $berita->berita_id)
+                ->with('success', 'Gambar galeri berhasil ditambahkan!');
+        }
+
+        return redirect()->route('berita.show', $berita->berita_id)
+            ->with('error', 'Tidak ada gambar yang diupload.');
+    }
+
+
+    /**
+     * Upload gambar pendukung
+     */
+    private function uploadGambarPendukung($files, $beritaId)
+    {
+        $sortOrder = 2;
+
+        foreach ($files as $file) {
+            if ($file->isValid()) {
+                // Generate unique filename
+                $filename = 'gambar-pendukung-' . $beritaId . '-' . time() . '-' . $sortOrder . '.' . $file->getClientOriginalExtension();
+
+                // PERUBAHAN: Store file - simpan di folder 'media/berita/gallery' (FOLDER BARU)
+                $file->storeAs('media/berita/gallery', $filename, 'public');
+
+                // Simpan ke tabel media dengan struktur yang baru
+                Media::create([
+                    'ref_table'     => 'berita',
+                    'ref_id'        => $beritaId,
+                    'file_name'     => $filename,
+                    'mime_type'     => $file->getMimeType(),
+                    'caption'       => 'Gambar Pendukung Berita',
+                    'sort_order'    => $sortOrder,
+                ]);
+
+                $sortOrder++;
+            }
+        }
+    }
+
+    /**
+     * Delete cover foto
+     */
+    private function deleteCoverFoto($beritaId)
+    {
+        $coverFoto = Media::where('ref_table', 'berita')
+            ->where('ref_id', $beritaId)
+            ->where('sort_order', 1)
+            ->first();
+
+        if ($coverFoto) {
+            // PERUBAHAN: Hapus file dari storage - path baru
+            Storage::disk('public')->delete('media/berita/' . $coverFoto->file_name);
+            // Hapus record dari database
+            $coverFoto->delete();
+        }
+    }
+
+    /**
+     * Delete semua file terkait berita
+     */
+    private function deleteAllFiles($beritaId)
+    {
+        $files = Media::where('ref_table', 'berita')
+            ->where('ref_id', $beritaId)
+            ->get();
+
+        foreach ($files as $file) {
+            // Tentukan path berdasarkan sort_order
+            if ($file->sort_order == 1) {
+                // Cover foto - PERUBAHAN PATH
+                Storage::disk('public')->delete('media/berita/' . $file->file_name);
+            } else {
+                // Gambar pendukung - PERUBAHAN PATH
+                Storage::disk('public')->delete('media/berita/gallery/' . $file->file_name);
+            }
+            $file->delete();
+        }
+    }
+
+    /**
+     * Delete file individual
+     */
+    public function deleteFile(string $beritaId, string $fileId)
+    {
+        $file = Media::where('media_id', $fileId)
+            ->where('ref_table', 'berita')
+            ->where('ref_id', $beritaId)
+            ->firstOrFail();
+
+        // Tentukan path berdasarkan sort_order
+        if ($file->sort_order == 1) {
+            // Cover foto - PERUBAHAN PATH
+            Storage::disk('public')->delete('media/berita/' . $file->file_name);
+        } else {
+            // Gambar pendukung - PERUBAHAN PATH
+            Storage::disk('public')->delete('media/berita/gallery/' . $file->file_name);
+        }
+
+        $file->delete();
+
+        return redirect()->route('berita.show', $beritaId)->with('success', 'File berhasil dihapus!');
+    }
+
 }

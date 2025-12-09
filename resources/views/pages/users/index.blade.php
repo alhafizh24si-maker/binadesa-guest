@@ -67,9 +67,11 @@
                                                     <label class="form-label fw-medium">Search</label>
                                                     <div class="input-group">
                                                         <input type="text" name="search" class="form-control"
-                                                            value="{{ request('search') }}" placeholder="Cari nama atau email...">
+                                                            value="{{ request('search') }}"
+                                                            placeholder="Cari nama atau email...">
                                                         <button type="submit" class="btn btn-primary">
-                                                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                                            <svg width="16" height="16" fill="currentColor"
+                                                                viewBox="0 0 16 16">
                                                                 <path
                                                                     d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
                                                             </svg>
@@ -82,7 +84,8 @@
                                                     <label class="form-label fw-medium">Filter Nama</label>
                                                     <div class="input-group">
                                                         <input type="text" name="filter_name" class="form-control"
-                                                            value="{{ request('filter_name') }}" placeholder="Filter berdasarkan nama...">
+                                                            value="{{ request('filter_name') }}"
+                                                            placeholder="Filter berdasarkan nama...">
                                                         <button type="submit" class="btn btn-outline-primary">
                                                             <i class="bi bi-funnel"></i>
                                                         </button>
@@ -99,7 +102,8 @@
                                                                 <i class="bi bi-arrow-clockwise me-1"></i>Reset
                                                             </a>
                                                         @endif
-                                                        <a href="{{ route('user.create') }}" class="btn btn-success flex-fill">
+                                                        <a href="{{ route('user.create') }}"
+                                                            class="btn btn-success flex-fill">
                                                             <i class="bi bi-plus-circle me-1"></i>Tambah
                                                         </a>
                                                     </div>
@@ -108,27 +112,29 @@
 
                                             <!-- Active Filters Info -->
                                             @if (request('search') || request('filter_name'))
-                                            <div class="row mt-3">
-                                                <div class="col-12">
-                                                    <div class="d-flex flex-wrap gap-2 align-items-center">
-                                                        <small class="text-muted">Filter aktif:</small>
-                                                        @if (request('search'))
-                                                        <span class="badge bg-primary">
-                                                            Search: "{{ request('search') }}"
-                                                            <a href="{{ route('user.index', ['filter_name' => request('filter_name')]) }}"
-                                                               class="text-white ms-1" style="text-decoration: none;">×</a>
-                                                        </span>
-                                                        @endif
-                                                        @if (request('filter_name'))
-                                                        <span class="badge bg-info text-dark">
-                                                            Nama: "{{ request('filter_name') }}"
-                                                            <a href="{{ route('user.index', ['search' => request('search')]) }}"
-                                                               class="text-dark ms-1" style="text-decoration: none;">×</a>
-                                                        </span>
-                                                        @endif
+                                                <div class="row mt-3">
+                                                    <div class="col-12">
+                                                        <div class="d-flex flex-wrap gap-2 align-items-center">
+                                                            <small class="text-muted">Filter aktif:</small>
+                                                            @if (request('search'))
+                                                                <span class="badge bg-primary">
+                                                                    Search: "{{ request('search') }}"
+                                                                    <a href="{{ route('user.index', ['filter_name' => request('filter_name')]) }}"
+                                                                        class="text-white ms-1"
+                                                                        style="text-decoration: none;">×</a>
+                                                                </span>
+                                                            @endif
+                                                            @if (request('filter_name'))
+                                                                <span class="badge bg-info text-dark">
+                                                                    Nama: "{{ request('filter_name') }}"
+                                                                    <a href="{{ route('user.index', ['search' => request('search')]) }}"
+                                                                        class="text-dark ms-1"
+                                                                        style="text-decoration: none;">×</a>
+                                                                </span>
+                                                            @endif
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
                                             @endif
                                         </form>
                                     </div>
@@ -142,7 +148,7 @@
                                                 <h5 class="mb-1 fw-bold">Daftar User</h5>
                                                 <p class="text-muted mb-0">
                                                     Total {{ $dataUser->total() }} user terdaftar
-                                                    @if(request('search') || request('filter_name'))
+                                                    @if (request('search') || request('filter_name'))
                                                         ({{ $dataUser->count() }} ditemukan)
                                                     @endif
                                                 </p>
@@ -178,11 +184,15 @@
 
                                                         <!-- Nama User dengan highlight jika filter aktif -->
                                                         <h5 class="card-title mb-2">
-                                                            @if(request('filter_name'))
+                                                            @if (request('filter_name'))
                                                                 @php
                                                                     $name = $item->name;
                                                                     $filterName = request('filter_name');
-                                                                    $highlightedName = preg_replace('/(' . preg_quote($filterName, '/') . ')/i', '<mark class="bg-warning">$1</mark>', $name);
+                                                                    $highlightedName = preg_replace(
+                                                                        '/(' . preg_quote($filterName, '/') . ')/i',
+                                                                        '<mark class="bg-warning">$1</mark>',
+                                                                        $name,
+                                                                    );
                                                                 @endphp
                                                                 {!! $highlightedName !!}
                                                             @else
@@ -195,16 +205,44 @@
                                                             <div class="email-container">
                                                                 <i class="bi bi-envelope text-muted me-2"></i>
                                                                 <span class="text-muted small">
-                                                                    @if(request('search'))
+                                                                    @if (request('search'))
                                                                         @php
                                                                             $email = $item->email;
                                                                             $searchTerm = request('search');
-                                                                            $highlightedEmail = preg_replace('/(' . preg_quote($searchTerm, '/') . ')/i', '<mark class="bg-warning">$1</mark>', $email);
+                                                                            $highlightedEmail = preg_replace(
+                                                                                '/(' .
+                                                                                    preg_quote($searchTerm, '/') .
+                                                                                    ')/i',
+                                                                                '<mark class="bg-warning">$1</mark>',
+                                                                                $email,
+                                                                            );
                                                                         @endphp
                                                                         {!! $highlightedEmail !!}
                                                                     @else
                                                                         {{ $item->email }}
                                                                     @endif
+                                                                </span>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- Tambahkan setelah bagian User ID (sebelum Password Toggle) -->
+                                                        <div class="mb-3">
+                                                            <div class="role-container">
+                                                                <i class="bi bi-person-gear text-muted me-2"></i>
+                                                                <span class="text-muted small">
+                                                                    Role:
+                                                                    @php
+                                                                        $roleColors = [
+                                                                            'Super Admin' => 'danger',
+                                                                            'Admin' => 'primary',
+                                                                            'Guest' => 'secondary',
+                                                                        ];
+                                                                        $color =
+                                                                            $roleColors[$item->role] ?? 'secondary';
+                                                                    @endphp
+                                                                    <span class="badge bg-{{ $color }}">
+                                                                        {{ $item->role }}
+                                                                    </span>
                                                                 </span>
                                                             </div>
                                                         </div>
@@ -228,7 +266,8 @@
                                                                     <button type="button"
                                                                         class="btn btn-outline-secondary btn-sm password-toggle"
                                                                         onclick="togglePassword({{ $item->id }})"
-                                                                        data-bs-toggle="tooltip" title="Tampilkan Password">
+                                                                        data-bs-toggle="tooltip"
+                                                                        title="Tampilkan Password">
                                                                         <i class="bi bi-eye"></i>
                                                                     </button>
                                                                     <span id="password-{{ $item->id }}"
@@ -280,22 +319,23 @@
                                                 <i class="bi bi-person-x display-1 text-muted"></i>
                                             </div>
                                             <h4 class="text-muted mb-3">
-                                                @if(request('search') || request('filter_name'))
+                                                @if (request('search') || request('filter_name'))
                                                     Tidak ada user yang ditemukan
                                                 @else
                                                     Belum ada data user
                                                 @endif
                                             </h4>
                                             <p class="text-muted mb-4">
-                                                @if(request('search') || request('filter_name'))
+                                                @if (request('search') || request('filter_name'))
                                                     Coba ubah kata kunci pencarian atau filter nama Anda.
                                                 @else
                                                     Mulai dengan menambahkan user pertama ke sistem.
                                                 @endif
                                             </p>
                                             <div class="d-flex gap-2 justify-content-center">
-                                                @if(request('search') || request('filter_name'))
-                                                    <a href="{{ route('user.index') }}" class="btn btn-outline-secondary">
+                                                @if (request('search') || request('filter_name'))
+                                                    <a href="{{ route('user.index') }}"
+                                                        class="btn btn-outline-secondary">
                                                         <i class="bi bi-arrow-clockwise me-1"></i>Reset Pencarian
                                                     </a>
                                                 @endif
@@ -428,7 +468,7 @@
             // Password toggle function
             function togglePassword(userId) {
                 const passwordDots = document.querySelector(`#password-${userId}`).previousElementSibling
-                .previousElementSibling;
+                    .previousElementSibling;
                 const passwordText = document.querySelector(`#password-${userId}`);
                 const toggleButton = document.querySelector(`[onclick="togglePassword(${userId})"]`);
 
@@ -463,4 +503,5 @@
         </script>
     @endsection
 </body>
+
 </html>
