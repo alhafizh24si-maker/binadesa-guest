@@ -545,7 +545,7 @@
     @section('content')
 
     <!-- ======= Header Section ======= -->
-    <div class="page-header">
+    <div class="page-header" style="padding-top: 250px; padding-bottom: 100px;">
         <div class="container">
             <div class="text-center">
                 <span class="subtitle" data-aos="fade-up">Berita</span>
@@ -554,6 +554,8 @@
             </div>
         </div>
     </div>
+
+
 
     <!-- ======= Main Content ======= -->
     <main class="container">
@@ -571,55 +573,7 @@
         </div>
         @endif
 
-        <!-- Stats Grid -->
-        <div class="stats-grid" data-aos="fade-up">
-            <div class="stat-card">
-                <h4>{{ $dataBerita->total() }}</h4>
-                <small>Total Berita</small>
-            </div>
-            <div class="stat-card">
-                <h4 class="text-success">{{ $publishedCount ?? 0 }}</h4>
-                <small>Berita Terbit</small>
-            </div>
-            <div class="stat-card">
-                <h4 class="text-warning">{{ $draftCount ?? 0 }}</h4>
-                <small>Berita Draft</small>
-            </div>
-            <div class="stat-card">
-                <h4 class="text-info">{{ $categoryCount ?? 0 }}</h4>
-                <small>Kategori Aktif</small>
-            </div>
-        </div>
 
-        <!-- Media Stats Card -->
-        <div class="stat-card mb-4" data-aos="fade-up" data-aos-delay="100">
-            <div class="row text-center">
-                <div class="col-md-4 mb-3 mb-md-0">
-                    <h4 class="text-primary mb-1">
-                        @php
-                            $totalMedia = 0;
-                            $totalCover = 0;
-                            $totalGallery = 0;
-                            foreach($dataBerita as $item) {
-                                $totalMedia += $item->media->count();
-                                $totalCover += $item->media->where('sort_order', 1)->count();
-                                $totalGallery += $item->media->where('sort_order', '>', 1)->count();
-                            }
-                        @endphp
-                        {{ $totalMedia }}
-                    </h4>
-                    <small>Total Foto</small>
-                </div>
-                <div class="col-md-4 mb-3 mb-md-0">
-                    <h4 class="text-success mb-1">{{ $totalCover }}</h4>
-                    <small>Cover Foto</small>
-                </div>
-                <div class="col-md-4">
-                    <h4 class="text-warning mb-1">{{ $totalGallery }}</h4>
-                    <small>Galeri Foto</small>
-                </div>
-            </div>
-        </div>
 
         <!-- Action Bar -->
         <div class="action-bar" data-aos="fade-up">

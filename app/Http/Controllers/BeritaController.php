@@ -41,8 +41,8 @@ class BeritaController extends Controller
      */
     public function create()
     {
-        $data['kategoriBerita'] = KategoriBerita::all();
-        return view('pages.berita.create', $data);
+       $kategori = KategoriBerita::all(); // atau select tertentu
+    return view('pages.berita.create', compact('kategori'));
     }
 
     /**

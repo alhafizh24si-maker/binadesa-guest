@@ -78,42 +78,97 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-6">
-                            <div class="hero-img position-relative">
-                                <img class="img-main img-fluid rounded-4 shadow-lg"
-                                    
-                                    data-aos="fade-in" data-aos-delay="500">
-                                <div class="position-absolute top-0 start-0 w-100 h-100" data-aos="fade-down"
-                                    data-aos-delay="600">
-                                    <div class="floating-card position-absolute top-0 end-0">
-                                        <div class="d-flex align-items-center">
-                                            <div class="bg-primary rounded-circle p-2 me-2">
-                                                <i class="bi bi-people text-white"></i>
-                                            </div>
-                                            <div>
-                                                <p class="mb-0 fw-bold">1,250+ Warga</p>
-                                                <small class="text-muted">Terkoneksi</small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="floating-card position-absolute bottom-0 start-0">
-                                        <div class="d-flex align-items-center">
-                                            <div class="bg-success rounded-circle p-2 me-2">
-                                                <i class="bi bi-shield-check text-white"></i>
-                                            </div>
-                                            <div>
-                                                <p class="mb-0 fw-bold">Informasi Terpercaya</p>
-                                                <small class="text-muted">Update real-time</small>
-                                            </div>
-                                        </div>
-                                    </div>
+                         <div class="col-lg-6">
+                <div class="hero-img position-relative">
+                    <!-- Carousel/Slideshow -->
+                    <div id="heroCarousel" class="carousel slide rounded-4 shadow-lg" data-bs-ride="carousel">
+                        <div class="carousel-indicators">
+                            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active"></button>
+                            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1"></button>
+                            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2"></button>
+                        </div>
+
+                        <div class="carousel-inner rounded-4">
+                            <!-- Slide 1 -->
+                            <div class="carousel-item active">
+                                <img src="{{ asset('assets-guest/images/teknologi desa.png') }}"
+                                     class="d-block w-100 img-fluid"
+                                     alt="Platform Desa Digital"
+                                     style="height: 400px; object-fit: cover;">
+                                <div class="carousel-caption d-none d-md-block">
+                                </div>
+                            </div>
+
+                            <!-- Slide 2 -->
+                            <div class="carousel-item">
+                                <img src="{{ asset('assets-guest/images/komunitas.jpg') }}"
+                                     class="d-block w-100 img-fluid"
+                                     alt="Komunitas Desa"
+                                     style="height: 400px; object-fit: cover;">
+                                <div class="carousel-caption d-none d-md-block">
+                                </div>
+                            </div>
+
+                            <!-- Slide 3 -->
+                            <div class="carousel-item">
+                                <img src="{{ asset('assets-guest/images/administrasi.png') }}"
+                                     class="d-block w-100 img-fluid"
+                                     alt="Teknologi Desa"
+                                     style="height: 400px; object-fit: cover;">
+                                <div class="carousel-caption d-none d-md-block">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Controls -->
+                        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+
+                    <!-- Floating cards tetap di atas carousel -->
+                    <div class="position-absolute top-0 start-0 w-100 h-100" data-aos="fade-down" data-aos-delay="600">
+                        <!-- Kartu floating "Informasi Terpercaya" -->
+                        <div class="floating-card position-absolute bottom-0 start-0">
+                            <div class="d-flex align-items-center">
+                                <div class="bg-success rounded-circle p-2 me-2 d-flex align-items-center justify-content-center">
+                                    <img src="{{ asset('assets-guest/images/shield.png') }}"
+                                         alt="Verified"
+                                         style="width: 24px; height: 24px; filter: brightness(0) invert(1);">
+                                </div>
+                                <div>
+                                    <p class="mb-0 fw-bold">Informasi Terpercaya</p>
+                                    <small class="text-muted">Update real-time</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Kartu floating "Warga Terkoneksi" -->
+                        <div class="floating-card position-absolute top-0 end-0">
+                            <div class="d-flex align-items-center">
+                                <div class="bg-primary rounded-circle p-2 me-2 d-flex align-items-center justify-content-center">
+                                    <img src="{{ asset('assets-guest/images/warga (2).png') }}"
+                                         alt="People"
+                                         style="width: 24px; height: 24px; filter: brightness(0) invert(1);">
+                                </div>
+                                <div>
+                                    <p class="mb-0 fw-bold">1,250+ Warga</p>
+                                    <small class="text-muted">Terkoneksi</small>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </section>
-            <!-- End Hero-->
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End Hero-->
 
             <!-- ======= Stats Section =======-->
             <section class="stats__v3 section">
