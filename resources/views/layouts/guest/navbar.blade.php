@@ -1,142 +1,407 @@
 <div class="navbar-container">
+  <!-- Topbar -->
   <div class="topbar d-none d-lg-block">
     <div class="container">
-      <div class="d-flex justify-content-between align-items-center">
+      <div class="d-flex justify-content-between align-items-center py-2">
         <div class="top-info">
           <small class="me-3">
-            <i class="fas fa-map-marker-alt me-2"></i>
-            <a href="#">Binadesa - Platform Desa Digital</a>
+            <i class="fas fa-map-marker-alt me-1"></i>
+            <a href="#" class="text-decoration-none">Binadesa - Platform Desa Digital</a>
           </small>
           <small class="me-3">
-            <i class="fas fa-envelope me-2"></i>
-            <a href="#">info@binadesa.id</a>
+            <i class="fas fa-envelope me-1"></i>
+            <a href="mailto:info@binadesa.id" class="text-decoration-none">info@binadesa.id</a>
           </small>
         </div>
         <div class="top-link">
-          <a href="#">
+          <a href="#" class="text-decoration-none">
             <small class="mx-2">Kebijakan Privasi</small>
           </a>
-          <span class="text-white">/</span>
-          <a href="#">
+          <span class="mx-1">|</span>
+          <a href="#" class="text-decoration-none">
             <small class="mx-2">Syarat & Ketentuan</small>
           </a>
-          <span class="text-white">/</span>
-          <a href="#">
-            <small class="ms-2">Bantuan</small>
+          <span class="mx-1">|</span>
+          <a href="#" class="text-decoration-none">
+            <small class="mx-2">Bantuan</small>
           </a>
         </div>
       </div>
     </div>
   </div>
 
-  <nav class="navbar navbar-expand-xl navbar-main">
+  <!-- Main Navbar -->
+  <nav class="navbar navbar-expand-xl navbar-main py-0">
     <div class="container">
-      <!-- LOGO DITAMBAHKAN DI SINI -->
-      <a href="{{ url('/') }}" class="navbar-brand d-flex align-items-center">
-        <img src="{{ asset('assets-guest/images/logobinadesa.png') }}" alt="Logo Binadesa" class="me-2" style="height: 40px;">
-        <h1 class="mb-0">Portal Desa</h1>
+      <!-- Brand/Logo -->
+      <a href="{{ url('/') }}" class="navbar-brand d-flex align-items-center py-3">
+        <img src="{{ asset('assets-guest/images/logobinadesa.png') }}"
+             alt="Logo Binadesa"
+             class="me-2"
+             style="height: 40px; width: auto;">
+        <h1 class="h4 mb-0 fw-bold text-primary">Portal Desa</h1>
       </a>
 
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-        <i class="fas fa-bars"></i>
+      <!-- Mobile Toggle Button -->
+      <button class="navbar-toggler border-0"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navbarCollapse"
+              aria-controls="navbarCollapse"
+              aria-expanded="false"
+              aria-label="Toggle navigation">
+        <i class="fas fa-bars fs-4"></i>
       </button>
 
+      <!-- Navbar Content -->
       <div class="collapse navbar-collapse" id="navbarCollapse">
-        <ul class="navbar-nav mx-auto">
-          <li class="nav-item">
-            <a href="{{ url('/dashboard') }}" class="nav-link {{ request()->is('/dashboard') ? 'active' : '' }}">
-              Beranda
+        <!-- Main Menu -->
+        <ul class="navbar-nav mx-auto mb-2 mb-xl-0">
+          <!-- Beranda -->
+          <li class="nav-item mx-1">
+            <a href="{{ url('/dashboard') }}"
+               class="nav-link px-3 py-3 d-flex align-items-center {{ request()->is('/dashboard') ? 'active' : '' }}">
+              <i class="fas fa-home me-2 d-none d-md-inline"></i>
+              <span>Beranda</span>
             </a>
           </li>
-          <li class="nav-item">
-            <a href="{{ route('warga.index') }}" class="nav-link {{ request()->is('warga*') ? 'active' : '' }}">
-              Data Warga
+
+          <!-- Dropdown Profil & Data -->
+          <li class="nav-item dropdown mx-1">
+            <a href="#"
+               class="nav-link px-3 py-3 d-flex align-items-center dropdown-toggle {{
+                  request()->is('profildesa*') ||
+                  request()->is('warga*') ||
+                  request()->is('agenda*') ? 'active' : '' }}"
+               data-bs-toggle="dropdown"
+               aria-expanded="false">
+              <i class="fas fa-database me-2 d-none d-md-inline"></i>
+              <span>Data Master</span>
             </a>
-          </li>
-          <li class="nav-item">
-            <a href="{{ route('kategoriberita.index') }}" class="nav-link {{ request()->is('kategoriberita*') ? 'active' : '' }}">
-              Kategori Berita
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="{{ route('berita.index') }}" class="nav-link {{ request()->is('kategoriberita*') ? 'active' : '' }}">
-              Data Berita
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="{{ route('user.index') }}" class="nav-link {{ request()->is('users*') ? 'active' : '' }}">
-              Manajemen User
-            </a>
-          </li>
-          <li class="nav-item dropdown">
-            <a href="#" class="nav-link dropdown-toggle {{ request()->is('warga/create') || request()->is('kategoriberita/create') || request()->is('users/create') ? 'active' : '' }}"
-               data-bs-toggle="dropdown">
-              Tambah Data
-            </a>
-            <ul class="dropdown-menu">
+            <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-0">
               <li>
-                <a href="{{ route('warga.create') }}" class="dropdown-item">
-                  Tambah Warga
+                <h6 class="dropdown-header fw-bold">Data Master</h6>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+
+              <!-- Profil Desa -->
+              <li>
+                <a href="{{ route('profildesa.index') }}"
+                   class="dropdown-item d-flex align-items-center py-2 {{ request()->is('profildesa') ? 'active' : '' }}">
+                  <i class="fas fa-home text-primary me-2"></i>
+                  <span>Profil Desa</span>
                 </a>
               </li>
               <li>
-                <a href="{{ route('kategoriberita.create') }}" class="dropdown-item">
-                  Tambah Kategori
+                <a href="{{ route('profildesa.create') }}"
+                   class="dropdown-item d-flex align-items-center py-2 {{ request()->is('profildesa/create') ? 'active' : '' }}">
+                  <i class="fas fa-plus-circle text-primary me-2"></i>
+                  <span>Tambah Profil Desa</span>
+                </a>
+              </li>
+
+              <li><hr class="dropdown-divider"></li>
+
+              <!-- Data Warga -->
+              <li>
+                <a href="{{ route('warga.index') }}"
+                   class="dropdown-item d-flex align-items-center py-2 {{ request()->is('warga') ? 'active' : '' }}">
+                  <i class="fas fa-users text-success me-2"></i>
+                  <span>Data Warga</span>
                 </a>
               </li>
               <li>
-                <a href="{{ route('berita.create') }}" class="dropdown-item">
-                  Tambah Berita
+                <a href="{{ route('warga.create') }}"
+                   class="dropdown-item d-flex align-items-center py-2 {{ request()->is('warga/create') ? 'active' : '' }}">
+                  <i class="fas fa-plus-circle text-success me-2"></i>
+                  <span>Tambah Warga</span>
+                </a>
+              </li>
+
+              <li><hr class="dropdown-divider"></li>
+
+              <!-- Agenda -->
+              <li>
+                <a href="{{ route('agenda.index') }}"
+                   class="dropdown-item d-flex align-items-center py-2 {{ request()->is('agenda') ? 'active' : '' }}">
+                  <i class="fas fa-calendar-alt text-secondary me-2"></i>
+                  <span>Agenda</span>
                 </a>
               </li>
               <li>
-                <a href="{{ route('user.create') }}" class="dropdown-item">
-                  Tambah User
+                <a href="{{ route('agenda.create') }}"
+                   class="dropdown-item d-flex align-items-center py-2 {{ request()->is('agenda/create') ? 'active' : '' }}">
+                  <i class="fas fa-plus-circle text-secondary me-2"></i>
+                  <span>Tambah Agenda</span>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <!-- Dropdown Berita & Kategori -->
+          <li class="nav-item dropdown mx-1">
+            <a href="#"
+               class="nav-link px-3 py-3 d-flex align-items-center dropdown-toggle {{
+                  request()->is('berita*') ||
+                  request()->is('kategoriberita*') ? 'active' : '' }}"
+               data-bs-toggle="dropdown"
+               aria-expanded="false">
+              <i class="fas fa-newspaper me-2 d-none d-md-inline"></i>
+              <span>Berita & Kategori</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-0">
+              <li>
+                <h6 class="dropdown-header fw-bold">Berita & Kategori</h6>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+
+              <!-- Kategori Berita -->
+              <li>
+                <a href="{{ route('kategoriberita.index') }}"
+                   class="dropdown-item d-flex align-items-center py-2 {{ request()->is('kategoriberita') ? 'active' : '' }}">
+                  <i class="fas fa-tags text-warning me-2"></i>
+                  <span>Kategori Berita</span>
+                </a>
+              </li>
+              <li>
+                <a href="{{ route('kategoriberita.create') }}"
+                   class="dropdown-item d-flex align-items-center py-2 {{ request()->is('kategoriberita/create') ? 'active' : '' }}">
+                  <i class="fas fa-plus-circle text-warning me-2"></i>
+                  <span>Tambah Kategori</span>
+                </a>
+              </li>
+
+              <li><hr class="dropdown-divider"></li>
+
+              <!-- Data Berita -->
+              <li>
+                <a href="{{ route('berita.index') }}"
+                   class="dropdown-item d-flex align-items-center py-2 {{ request()->is('berita') ? 'active' : '' }}">
+                  <i class="fas fa-newspaper text-info me-2"></i>
+                  <span>Data Berita</span>
+                </a>
+              </li>
+              <li>
+                <a href="{{ route('berita.create') }}"
+                   class="dropdown-item d-flex align-items-center py-2 {{ request()->is('berita/create') ? 'active' : '' }}">
+                  <i class="fas fa-plus-circle text-info me-2"></i>
+                  <span>Tambah Berita</span>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <!-- Dropdown Manajemen User -->
+          <li class="nav-item dropdown mx-1">
+            <a href="#"
+               class="nav-link px-3 py-3 d-flex align-items-center dropdown-toggle {{
+                  request()->is('user*') ? 'active' : '' }}"
+               data-bs-toggle="dropdown"
+               aria-expanded="false">
+              <i class="fas fa-user-cog me-2 d-none d-md-inline"></i>
+              <span>Manajemen User</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-0">
+              <li>
+                <h6 class="dropdown-header fw-bold">Manajemen User</h6>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+
+              <!-- Daftar User -->
+              <li>
+                <a href="{{ route('user.index') }}"
+                   class="dropdown-item d-flex align-items-center py-2 {{ request()->is('user') ? 'active' : '' }}">
+                  <i class="fas fa-users text-danger me-2"></i>
+                  <span>Daftar User</span>
+                </a>
+              </li>
+
+              <!-- Tambah User -->
+              <li>
+                <a href="{{ route('user.create') }}"
+                   class="dropdown-item d-flex align-items-center py-2 {{ request()->is('user/create') ? 'active' : '' }}">
+                  <i class="fas fa-user-plus text-danger me-2"></i>
+                  <span>Tambah User</span>
                 </a>
               </li>
             </ul>
           </li>
         </ul>
 
-        <div class="navbar-actions">
-          <button class="action-btn" data-bs-toggle="modal" data-bs-target="#searchModal">
-            <i class="fas fa-search"></i>
-          </button>
-
-          <button class="action-btn position-relative">
-            <i class="fas fa-bell"></i>
-            <span class="notification-badge">3</span>
-          </button>
-
-          <div class="nav-item dropdown">
-            <a href="#" class="user-avatar" data-bs-toggle="dropdown">
-              <i class="fas fa-user"></i>
-            </a>
-            <ul class="dropdown-menu user-dropdown-menu">
-              <li>
-                <a href="#" class="user-dropdown-item">
-                  <i class="fas fa-user me-2"></i>Profil
-                </a>
-              </li>
-              <li>
-                <a href="#" class="user-dropdown-item">
-                  <i class="fas fa-cog me-2"></i>Pengaturan
-                </a>
-              </li>
-              <li><hr class="user-dropdown-divider"></li>
-              <li>
-                <a href="{{ route('logout') }}" class="user-dropdown-item text-danger"
-                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                  <i class="fas fa-sign-out-alt me-2"></i>Logout
-                </a>
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                  @csrf
-                </form>
-              </li>
-            </ul>
-          </div>
+        <!-- Logout Button -->
+        <div class="d-flex align-items-center">
+          <form method="POST" action="{{ route('logout') }}" id="logout-form">
+            @csrf
+            <button type="submit"
+                    class="btn btn-danger d-flex align-items-center"
+                    onclick="return confirm('Apakah Anda yakin ingin logout?')">
+              <i class="fas fa-sign-out-alt me-2"></i>
+              <span>Logout</span>
+            </button>
+          </form>
         </div>
       </div>
     </div>
   </nav>
 </div>
+
+<!-- Tambahkan style untuk mempercantik navbar -->
+<style>
+.navbar-container {
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.topbar {
+  background-color: #2c3e50;
+  color: #ecf0f1;
+}
+
+.topbar a {
+  color: #ecf0f1 !important;
+  transition: color 0.3s;
+}
+
+.topbar a:hover {
+  color: #3498db !important;
+}
+
+.navbar-main {
+  background-color: #ffffff;
+}
+
+.navbar-brand {
+  color: #2c3e50 !important;
+}
+
+.nav-link {
+  color: #34495e !important;
+  font-weight: 500;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.nav-link:hover {
+  color: #2980b9 !important;
+  background-color: #f8f9fa;
+}
+
+.nav-link.active {
+  color: #ffffff !important;
+  background-color: #3498db;
+}
+
+.nav-link.active:hover {
+  background-color: #2980b9;
+}
+
+.dropdown-menu {
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 0;
+  min-width: 240px;
+}
+
+.dropdown-item {
+  padding: 0.5rem 1rem;
+  color: #34495e;
+  transition: all 0.2s;
+  font-size: 0.9rem;
+}
+
+.dropdown-item:hover {
+  background-color: #f8f9fa;
+  color: #2980b9;
+}
+
+.dropdown-item.active {
+  background-color: #3498db;
+  color: white;
+}
+
+.dropdown-header {
+  font-size: 0.85rem;
+  color: #6c757d;
+}
+
+.navbar-toggler:focus {
+  box-shadow: none;
+  outline: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  .navbar-nav .nav-item {
+    margin: 0.1rem 0;
+  }
+
+  .nav-link {
+    padding: 0.75rem 1rem !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar-collapse {
+    padding: 1rem 0;
+  }
+
+  .dropdown-menu {
+    border: 1px solid #eee;
+    margin-top: 0.5rem;
+    margin-left: 1rem;
+  }
+
+  .btn-danger {
+    width: 100%;
+    justify-content: center;
+    margin-top: 1rem;
+  }
+}
+
+/* Hover effect untuk dropdown di desktop */
+@media (min-width: 1200px) {
+  .nav-item.dropdown:hover .dropdown-menu {
+    display: block;
+    margin-top: 0;
+  }
+
+  .dropdown-menu {
+    animation: fadeIn 0.2s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+</style>
+
+<script>
+// Menambahkan hover effect untuk dropdown di desktop
+document.addEventListener('DOMContentLoaded', function() {
+  const dropdowns = document.querySelectorAll('.nav-item.dropdown');
+
+  dropdowns.forEach(dropdown => {
+    // Untuk desktop (hover)
+    dropdown.addEventListener('mouseenter', function() {
+      if (window.innerWidth >= 1200) {
+        const dropdownMenu = this.querySelector('.dropdown-menu');
+        dropdownMenu.classList.add('show');
+      }
+    });
+
+    dropdown.addEventListener('mouseleave', function() {
+      if (window.innerWidth >= 1200) {
+        const dropdownMenu = this.querySelector('.dropdown-menu');
+        dropdownMenu.classList.remove('show');
+      }
+    });
+  });
+});
+</script>

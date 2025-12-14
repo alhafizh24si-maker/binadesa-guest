@@ -257,7 +257,6 @@
                                      alt="Binadesa Platform Desa Digital"
                                      style="width: 100%; height: 400px; object-fit: cover;">
                                 <div class="overlay-text position-absolute bottom-0 start-0 p-4 text-white">
-                                    <h4 class="mb-2">Transformasi Digital Desa</h4>
                                     <p class="mb-0">Membawa desa ke era digital</p>
                                 </div>
                             </div>

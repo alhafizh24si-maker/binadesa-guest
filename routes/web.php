@@ -1,12 +1,14 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\BeritaController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\KategoriberitaController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WargaController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AgendaController;
+use App\Http\Controllers\BeritaController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ProfilDesaController;
+use App\Http\Controllers\KategoriberitaController;
 
 // Route untuk guest (belum login)
 Route::middleware('guest')->group(function () {
@@ -17,33 +19,36 @@ Route::middleware('guest')->group(function () {
 });
 
 // Route yang membutuhkan authentication
-    // Dashboard
-    Route::get('/dashboard', [DashboardController::class, 'index'])
-        ->name('dashboard')
-        ->middleware('checkislogin');
+// Dashboard
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->name('dashboard')
+    ->middleware('checkislogin');
 
-    // Data Warga
-    Route::resource('warga', WargaController::class);
+// Data Warga
+Route::resource('warga', WargaController::class);
 
-     Route::middleware(['auth', 'checkrole:Admin'])->group(function () {
+Route::middleware(['auth', 'checkrole:Admin'])->group(function () {
     Route::resource('user', UserController::class);
-    });
-    // Berita Routes - SINGLE RESOURCE
-    Route::resource('berita', BeritaController::class);
+});
+// Berita Routes - SINGLE RESOURCE
+Route::resource('berita', BeritaController::class);
 
-    // Route tambahan untuk berita - HANYA SATU KALI
-    Route::post('/berita/{berita}/upload-gallery', [BeritaController::class, 'uploadGallery'])
-        ->name('berita.uploadGallery');
+// Route tambahan untuk berita - HANYA SATU KALI
+Route::post('/berita/{berita}/upload-gallery', [BeritaController::class, 'uploadGallery'])
+    ->name('berita.uploadGallery');
 
-    Route::delete('/berita/{berita}/file/{file}', [BeritaController::class, 'deleteFile'])
-        ->name('berita.deleteFile');
+Route::delete('/berita/{berita}/file/{file}', [BeritaController::class, 'deleteFile'])
+    ->name('berita.deleteFile');
 
-    // Kategori Berita
-    Route::resource('kategoriberita', KategoriBeritaController::class);
+// Kategori Berita
+Route::resource('kategoriberita', KategoriBeritaController::class);
 
-    // Logout
-    Route::get('/logout', [AuthController::class, 'logout'])->name('logout.get');
-    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+// Logout
+Route::get('/logout', [AuthController::class, 'logout'])->name('logout.get');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+Route::resource('profildesa', ProfilDesaController::class);
+Route::resource('agenda', AgendaController::class);
 
 
 // Fallback route
