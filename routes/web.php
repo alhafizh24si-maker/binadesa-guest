@@ -6,6 +6,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\WargaController;
 use App\Http\Controllers\AgendaController;
 use App\Http\Controllers\BeritaController;
+use App\Http\Controllers\GaleriController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfilDesaController;
 use App\Http\Controllers\KategoriberitaController;
@@ -27,9 +28,10 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
 // Data Warga
 Route::resource('warga', WargaController::class);
 
-Route::middleware(['auth', 'checkrole:Admin'])->group(function () {
+Route::middleware(['auth', 'checkrole:Super Admin'])->group(function () {
     Route::resource('user', UserController::class);
 });
+
 // Berita Routes - SINGLE RESOURCE
 Route::resource('berita', BeritaController::class);
 
@@ -49,6 +51,18 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::resource('profildesa', ProfilDesaController::class);
 Route::resource('agenda', AgendaController::class);
+
+Route::resource('galeri', GaleriController::class);
+Route::group(['prefix' => 'galeri', 'as' => 'galeri.'], function () {
+    // Upload multiple images dari halaman show
+    Route::post('{id}/upload-images', [GaleriController::class, 'uploadImages'])->name('uploadImages');
+
+    // Delete single file
+    Route::delete('{galeriId}/file/{fileId}', [GaleriController::class, 'deleteFile'])->name('deleteFile');
+
+    // Update sort order
+    Route::post('{galeriId}/sort-order', [GaleriController::class, 'updateSortOrder'])->name('updateSortOrder');
+});
 
 
 // Fallback route

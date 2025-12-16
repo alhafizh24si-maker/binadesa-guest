@@ -72,7 +72,8 @@
                class="nav-link px-3 py-3 d-flex align-items-center dropdown-toggle {{
                   request()->is('profildesa*') ||
                   request()->is('warga*') ||
-                  request()->is('agenda*') ? 'active' : '' }}"
+                  request()->is('agenda*') ||
+                  request()->is('galeri*') ? 'active' : '' }}"
                data-bs-toggle="dropdown"
                aria-expanded="false">
               <i class="fas fa-database me-2 d-none d-md-inline"></i>
@@ -133,6 +134,24 @@
                    class="dropdown-item d-flex align-items-center py-2 {{ request()->is('agenda/create') ? 'active' : '' }}">
                   <i class="fas fa-plus-circle text-secondary me-2"></i>
                   <span>Tambah Agenda</span>
+                </a>
+              </li>
+
+              <li><hr class="dropdown-divider"></li>
+
+              <!-- Galeri (Baru Ditambahkan) -->
+              <li>
+                <a href="{{ route('galeri.index') }}"
+                   class="dropdown-item d-flex align-items-center py-2 {{ request()->is('galeri') ? 'active' : '' }}">
+                  <i class="fas fa-images text-info me-2"></i>
+                  <span>Galeri Foto</span>
+                </a>
+              </li>
+              <li>
+                <a href="{{ route('galeri.create') }}"
+                   class="dropdown-item d-flex align-items-center py-2 {{ request()->is('galeri/create') ? 'active' : '' }}">
+                  <i class="fas fa-plus-circle text-info me-2"></i>
+                  <span>Tambah Galeri</span>
                 </a>
               </li>
             </ul>
@@ -225,6 +244,15 @@
                 </a>
               </li>
             </ul>
+          </li>
+
+          <!-- Galeri Menu Tambahan (Opsional: Untuk quick access di mobile) -->
+          <li class="nav-item mx-1 d-xl-none">
+            <a href="{{ route('galeri.index') }}"
+               class="nav-link px-3 py-3 d-flex align-items-center {{ request()->is('galeri') ? 'active' : '' }}">
+              <i class="fas fa-images me-2 d-none d-md-inline"></i>
+              <span>Galeri</span>
+            </a>
           </li>
         </ul>
 
@@ -329,6 +357,11 @@
   outline: none;
 }
 
+/* Warna khusus untuk ikon Galeri */
+.fa-images {
+  color: #17a2b8;
+}
+
 /* Responsive adjustments */
 @media (max-width: 1200px) {
   .navbar-nav .nav-item {
@@ -379,6 +412,15 @@
       transform: translateY(0);
     }
   }
+}
+
+/* Efek hover khusus untuk menu Galeri */
+.dropdown-item:hover .fa-images {
+  color: #ffffff;
+}
+
+.dropdown-item.active .fa-images {
+  color: #ffffff;
 }
 </style>
 
