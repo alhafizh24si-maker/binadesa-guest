@@ -80,6 +80,29 @@
                                         </div>
                                     </div>
 
+                                    <!-- Tambahkan setelah bagian role -->
+<div class="row gap-3 mb-4">
+    <div class="col-md-12">
+        <label class="mb-2 fw-bold" for="profile_picture">Foto Profil</label>
+        <input class="form-control @error('profile_picture') is-invalid @enderror"
+               id="profile_picture"
+               type="file"
+               name="profile_picture"
+               accept="image/*">
+        @error('profile_picture')
+            <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+        <small class="text-muted">Ukuran maksimal 2MB. Format: JPEG, PNG, JPG, GIF</small>
+
+        <!-- Image preview -->
+        <div class="mt-3" id="imagePreviewContainer" style="display: none;">
+            <p class="small text-muted mb-2">Preview:</p>
+            <img id="imagePreview" class="rounded-circle border"
+                 style="width: 120px; height: 120px; object-fit: cover;">
+        </div>
+    </div>
+</div>
+
                                     <div class="row gap-3 mb-4">
                                         <div class="col-md-6">
                                             <label class="mb-2 fw-bold" for="password">Password <span
@@ -124,4 +147,25 @@
             <!-- End Form Section-->
 
         </main>
+        <script>
+    // Image preview for profile picture
+    document.getElementById('profile_picture').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        const preview = document.getElementById('imagePreview');
+        const previewContainer = document.getElementById('imagePreviewContainer');
+
+        if (file) {
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                previewContainer.style.display = 'block';
+            }
+
+            reader.readAsDataURL(file);
+        } else {
+            previewContainer.style.display = 'none';
+        }
+    });
+</script>
     @endsection

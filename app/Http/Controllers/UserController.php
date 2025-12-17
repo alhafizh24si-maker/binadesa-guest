@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -12,35 +14,31 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
+        // PAKAI YANG SUDAH ADA (jangan diubah)
         $query = User::query();
 
-        // Search functionality
-        if ($request->has('search') && $request->search != '') {
-            $search = $request->search;
-            $query->where(function($q) use ($search) {
-                $q->where('name', 'like', '%' . $search . '%')
-                  ->orWhere('email', 'like', '%' . $search . '%');
+        if ($request->filled('search')) {
+            $query->where(function($q) use ($request) {
+                $q->where('name', 'LIKE', '%' . $request->search . '%')
+                  ->orWhere('email', 'LIKE', '%' . $request->search . '%');
             });
         }
 
-        // Filter by name
-        if ($request->has('filter_name') && $request->filter_name != '') {
-            $query->where('name', 'like', '%' . $request->filter_name . '%');
+        if ($request->filled('filter_user')) {
+            if ($request->filter_user == 'a') {
+                $query->whereRaw('LOWER(SUBSTRING(name, 1, 1)) BETWEEN "a" AND "m"');
+            } elseif ($request->filter_user == 'n') {
+                $query->whereRaw('LOWER(SUBSTRING(name, 1, 1)) BETWEEN "n" AND "z"');
+            }
         }
 
-        // Filter by role
-        if ($request->has('filter_role') && $request->filter_role != '') {
-            $query->where('role', $request->filter_role);
-        }
+        $query->orderBy('name', 'asc');
+        $data['dataUser'] = $query->paginate(10);
+        $data['dataUser']->appends($request->query());
 
-        $dataUser = $query->orderBy('created_at', 'desc')->paginate(12);
-
-        return view('pages.users.index', compact('dataUser'));
+        return view('pages.users.index', $data);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return view('pages.users.create');
@@ -51,105 +49,99 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:8|confirmed',
-            'role' => 'required|in:Super Admin,Admin,Guest',
-        ]);
+        // Data dasar (PAKAI YANG SUDAH ADA)
+        $data['name'] = $request->name;
+        $data['email'] = $request->email;
+        $data['password'] = Hash::make($request->password);
+        $data['role'] = $request->role;
 
-        try {
-            $user = User::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => bcrypt($request->password),
-                'plain_password' => $request->password, // Simpan password plain jika diperlukan
-                'role' => $request->role,
-            ]);
+        // PERBAIKAN: UPLOAD GAMBAR MENGGUNAKAN STORAGE FACADE
+        if ($request->hasFile('profile_picture')) {
+            // Simpan file ke storage dengan disk 'public'
+            $fileName = time() . '_' . $request->file('profile_picture')->getClientOriginalName();
 
-            return redirect()->route('user.index')
-                ->with('success', 'User <strong>' . $user->name . '</strong> berhasil ditambahkan!');
+            // PERBAIKAN: Gunakan Storage facade dengan disk 'public'
+            $request->file('profile_picture')->storeAs('profile_pictures', $fileName, 'public');
 
-        } catch (\Exception $e) {
-            return redirect()->back()
-                ->with('error', 'Gagal menambahkan user. Error: ' . $e->getMessage())
-                ->withInput();
+            $data['profile_picture'] = $fileName;
         }
+
+        User::create($data);
+
+        return redirect()->route('user.index')->with('success', 'Penambahan Data Berhasil!');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show($id)
+    public function edit(string $id)
     {
-        $user = User::findOrFail($id);
-        return view('pages.users.show', compact('user'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit($id)
-    {
-        $user = User::findOrFail($id);
-        return view('pages.users.edit', compact('user'));
+         $user = User::findOrFail($id);
+    return view('pages.users.edit', compact('user'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
-    {
-        $user = User::findOrFail($id);
+    public function update(Request $request, string $id)
+{
+    $user = User::findOrFail($id);
 
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $id,
-            'password' => 'nullable|min:8|confirmed',
-            'role' => 'required|in:Super Admin,Admin,Guest',
-        ]);
+    // TAMBAHKAN VALIDASI
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email,' . $id,
+        'password' => 'nullable|min:8|confirmed',
+        'role' => 'required|in:Super Admin,Admin,Guest',
+        'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+    ]);
 
-        try {
-            $data = [
-                'name' => $request->name,
-                'email' => $request->email,
-                'role' => $request->role,
-            ];
+    $user->name = $request->name;
+    $user->email = $request->email;
 
-            // Update password hanya jika diisi
-            if ($request->filled('password')) {
-                $data['password'] = bcrypt($request->password);
-                $data['plain_password'] = $request->password;
-            }
-
-            $user->update($data);
-
-            return redirect()->route('user.index')
-                ->with('success', 'User <strong>' . $user->name . '</strong> berhasil diperbarui!');
-
-        } catch (\Exception $e) {
-            return redirect()->back()
-                ->with('error', 'Gagal memperbarui user. Error: ' . $e->getMessage())
-                ->withInput();
-        }
+    if ($request->filled('password')) {
+        $user->password = Hash::make($request->password);
     }
+
+    $user->role = $request->role;
+
+    // HANDLE REMOVE CHECKBOX
+    if ($request->has('remove_profile_picture') && $request->remove_profile_picture == '1') {
+        if ($user->profile_picture && Storage::disk('public')->exists('profile_pictures/' . $user->profile_picture)) {
+            Storage::disk('public')->delete('profile_pictures/' . $user->profile_picture);
+        }
+        $user->profile_picture = null;
+    }
+    // HANDLE UPLOAD NEW PICTURE
+    elseif ($request->hasFile('profile_picture')) {
+        // Hapus file lama jika ada
+        if ($user->profile_picture && Storage::disk('public')->exists('profile_pictures/' . $user->profile_picture)) {
+            Storage::disk('public')->delete('profile_pictures/' . $user->profile_picture);
+        }
+
+        // Simpan file baru
+        $fileName = time() . '_' . $request->file('profile_picture')->getClientOriginalName();
+        $request->file('profile_picture')->storeAs('profile_pictures', $fileName, 'public');
+
+        $user->profile_picture = $fileName;
+    }
+
+    $user->save();
+
+    return redirect()->route('user.index')->with('success', 'Perubahan Data Berhasil!');
+}
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(string $id)
     {
-        try {
-            $user = User::findOrFail($id);
-            $userName = $user->name;
-            $user->delete();
+        $user = User::findOrFail($id);
 
-            return redirect()->route('user.index')
-                ->with('success', 'User <strong>' . $userName . '</strong> berhasil dihapus!');
-
-        } catch (\Exception $e) {
-            return redirect()->back()
-                ->with('error', 'Gagal menghapus user. Error: ' . $e->getMessage());
+        // PERBAIKAN: Hapus profile picture jika ada
+        if ($user->profile_picture && Storage::disk('public')->exists('profile_pictures/' . $user->profile_picture)) {
+            Storage::disk('public')->delete('profile_pictures/' . $user->profile_picture);
         }
+
+        $user->delete();
+
+        return redirect()->route('user.index')->with('success', 'Data berhasil dihapus');
     }
 }

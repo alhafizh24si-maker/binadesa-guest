@@ -168,19 +168,24 @@
                                                 <div class="card news-card border-0 shadow-sm h-100" data-aos="fade-up"
                                                     data-aos-delay="{{ $loop->index * 100 }}">
                                                     <div class="card-body">
-                                                        <!-- Header dengan avatar dan nomor -->
-                                                        <div class="d-flex justify-content-between align-items-start mb-3">
-                                                            <div class="user-avatar">
-                                                                <div
-                                                                    class="avatar-wrapper bg-primary bg-opacity-10 rounded-circle p-3">
-                                                                    <i class="bi bi-person-fill text-primary fs-4"></i>
-                                                                </div>
-                                                            </div>
-                                                            <div class="user-number">
-                                                                <span
-                                                                    class="badge bg-secondary">#{{ ($dataUser->currentPage() - 1) * $dataUser->perPage() + $loop->iteration }}</span>
-                                                            </div>
-                                                        </div>
+                                                       <!-- Header dengan avatar dan nomor -->
+<div class="d-flex justify-content-between align-items-start mb-3">
+    <div class="user-avatar">
+        @if($item->profile_picture)
+            <img src="{{ $item->profile_picture_url }}"
+                 class="rounded-circle border"
+                 style="width: 60px; height: 60px; object-fit: cover;">
+        @else
+            <div class="avatar-wrapper bg-primary bg-opacity-10 rounded-circle p-3">
+                <i class="bi bi-person-fill text-primary fs-4"></i>
+            </div>
+        @endif
+    </div>
+    <div class="user-number">
+        <span
+            class="badge bg-secondary">#{{ ($dataUser->currentPage() - 1) * $dataUser->perPage() + $loop->iteration }}</span>
+    </div>
+</div>
 
                                                         <!-- Nama User dengan highlight jika filter aktif -->
                                                         <h5 class="card-title mb-2">

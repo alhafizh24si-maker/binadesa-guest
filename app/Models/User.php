@@ -1,43 +1,28 @@
 <?php
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
     protected $fillable = [
         'name',
         'email',
         'password',
         'role',
+        'profile_picture',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
@@ -45,10 +30,12 @@ class User extends Authenticatable
             'password'          => 'hashed',
         ];
     }
+
     public function warga()
     {
         return $this->hasOne(Warga::class);
     }
+
     public function scopeSearch($query, $request, array $columns)
     {
         if ($request->filled('search')) {
@@ -58,5 +45,33 @@ class User extends Authenticatable
                 }
             });
         }
+    }
+
+    /**
+     * Get the URL for the profile picture.
+     */
+    public function getProfilePictureUrlAttribute()
+    {
+        if (!$this->profile_picture) {
+            // Jika tidak ada gambar, gunakan avatar dengan inisial nama
+            $initials = strtoupper(substr($this->name, 0, 2));
+            return "https://ui-avatars.com/api/?name={$initials}&background=3498db&color=fff&size=100";
+        }
+
+        // PERBAIKAN: Gunakan Storage::url() dengan path yang benar
+        // Sesuaikan dengan controller: 'profile_pictures' (underscore)
+        return Storage::url('profile_pictures/' . $this->profile_picture);
+    }
+
+    /**
+     * Check if profile picture exists
+     */
+    public function getHasProfilePictureAttribute()
+    {
+        if (!$this->profile_picture) {
+            return false;
+        }
+
+        return Storage::disk('public')->exists('profile_pictures/' . $this->profile_picture);
     }
 }

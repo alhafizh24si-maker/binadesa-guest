@@ -256,17 +256,90 @@
           </li>
         </ul>
 
-        <!-- Logout Button -->
-        <div class="d-flex align-items-center">
-          <form method="POST" action="{{ route('logout') }}" id="logout-form">
-            @csrf
-            <button type="submit"
-                    class="btn btn-danger d-flex align-items-center"
-                    onclick="return confirm('Apakah Anda yakin ingin logout?')">
-              <i class="fas fa-sign-out-alt me-2"></i>
-              <span>Logout</span>
-            </button>
-          </form>
+        <!-- Profile Dropdown -->
+        <div class="nav-item dropdown ms-3">
+            <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle"
+               data-bs-toggle="dropdown" aria-expanded="false">
+                @auth
+                    @if(auth()->user()->profile_picture)
+                        <img src="{{ auth()->user()->profile_picture_url }}"
+                             class="rounded-circle border"
+                             style="width: 40px; height: 40px; object-fit: cover;">
+                    @else
+                        <div class="avatar-placeholder rounded-circle bg-primary bg-opacity-10 d-flex align-items-center justify-content-center"
+                             style="width: 40px; height: 40px;">
+                            <i class="bi bi-person-fill text-primary"></i>
+                        </div>
+                    @endif
+                    <span class="ms-2 d-none d-xl-inline fw-medium">
+                        {{ auth()->user()->name }}
+                    </span>
+                @endauth
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2">
+                <li>
+                    <div class="dropdown-header">
+                        <div class="d-flex align-items-center">
+                            @auth
+                                @if(auth()->user()->profile_picture)
+                                    <img src="{{ auth()->user()->profile_picture_url }}"
+                                         class="rounded-circle me-2"
+                                         style="width: 50px; height: 50px; object-fit: cover;">
+                                @else
+                                    <div class="rounded-circle bg-primary bg-opacity-10 d-flex align-items-center justify-content-center me-2"
+                                         style="width: 50px; height: 50px;">
+                                        <i class="bi bi-person-fill text-primary fs-5"></i>
+                                    </div>
+                                @endif
+                                <div>
+                                    <h6 class="mb-0 fw-bold">{{ auth()->user()->name }}</h6>
+                                    <small class="text-muted">{{ auth()->user()->email }}</small>
+                                    <div class="mt-1">
+                                        @php
+                                            $roleColors = [
+                                                'Super Admin' => 'danger',
+                                                'Admin' => 'primary',
+                                                'Guest' => 'secondary',
+                                            ];
+                                            $color = $roleColors[auth()->user()->role] ?? 'secondary';
+                                        @endphp
+                                        <span class="badge bg-{{ $color }} small">
+                                            {{ auth()->user()->role }}
+                                        </span>
+                                    </div>
+                                </div>
+                            @endauth
+                        </div>
+                    </div>
+                </li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                    <a href="{{ route('user.edit', auth()->id()) }}"
+                       class="dropdown-item d-flex align-items-center py-2">
+                        <i class="bi bi-person-circle me-2 text-primary"></i>
+                        <span>Edit Profil</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('user.index') }}"
+                       class="dropdown-item d-flex align-items-center py-2">
+                        <i class="bi bi-people me-2 text-info"></i>
+                        <span>Kelola User</span>
+                    </a>
+                </li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                    <form method="POST" action="{{ route('logout') }}" class="mb-0">
+                        @csrf
+                        <button type="submit"
+                                class="dropdown-item d-flex align-items-center py-2 text-danger"
+                                onclick="return confirm('Apakah Anda yakin ingin logout?')">
+                            <i class="bi bi-box-arrow-right me-2"></i>
+                            <span>Logout</span>
+                        </button>
+                    </form>
+                </li>
+            </ul>
         </div>
       </div>
     </div>
@@ -357,6 +430,39 @@
   outline: none;
 }
 
+/* Profile Dropdown Styling */
+.avatar-placeholder {
+    transition: all 0.3s ease;
+}
+
+.nav-item.dropdown:hover .avatar-placeholder {
+    background: linear-gradient(135deg, #2e7d32, #4caf50) !important;
+}
+
+.nav-item.dropdown:hover .avatar-placeholder i {
+    color: white !important;
+}
+
+.dropdown-header img {
+    border: 3px solid #f8f9fa;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Profile name in navbar */
+.nav-item.dropdown .dropdown-toggle span {
+    color: #34495e;
+    font-size: 0.95rem;
+}
+
+.nav-item.dropdown .dropdown-toggle:hover span {
+    color: #2980b9;
+}
+
+/* Profile dropdown width */
+.nav-item.dropdown .dropdown-menu {
+    min-width: 300px;
+}
+
 /* Warna khusus untuk ikon Galeri */
 .fa-images {
   color: #17a2b8;
@@ -371,6 +477,15 @@
   .nav-link {
     padding: 0.75rem 1rem !important;
   }
+
+  /* Profile responsive */
+  .nav-item.dropdown .dropdown-toggle span {
+      display: none;
+  }
+
+  .nav-item.dropdown {
+      margin-right: 10px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -384,10 +499,12 @@
     margin-left: 1rem;
   }
 
-  .btn-danger {
-    width: 100%;
-    justify-content: center;
-    margin-top: 1rem;
+  /* Profile responsive mobile */
+  .nav-item.dropdown .dropdown-menu {
+      min-width: 280px;
+      position: absolute;
+      right: 0;
+      left: auto;
   }
 }
 
