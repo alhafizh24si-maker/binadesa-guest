@@ -68,6 +68,7 @@ class AuthController extends Controller
             'telepon' => 'required|string|max:15',
             'nik' => 'required|string|size:16',
             'alamat' => 'required|string|max:500',
+            'role' => 'required',
             'password' => 'required|string|min:8|confirmed',
             'terms' => 'required|accepted',
         ], [
@@ -94,7 +95,7 @@ class AuthController extends Controller
             'nik' => $validated['nik'],
             'alamat' => $validated['alamat'],
             'password' => Hash::make($validated['password']),
-            'role' => 'warga', // Default role
+            'role' => $validated['role'], // Default role
             'status' => 'active', // Default status
         ]);
 
