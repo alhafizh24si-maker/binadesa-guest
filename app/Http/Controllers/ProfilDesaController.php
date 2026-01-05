@@ -42,12 +42,6 @@ class ProfilDesaController extends Controller
      */
     public function create()
     {
-        // Cek apakah sudah ada profil
-        $profilCount = Profil::count();
-        if ($profilCount > 0) {
-            return redirect()->route('profildesa.index')
-                ->with('warning', 'Hanya boleh ada 1 profil desa. Silahkan edit profil yang sudah ada.');
-        }
 
         return view('pages.profildesa.create');
     }

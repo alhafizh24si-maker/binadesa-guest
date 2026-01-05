@@ -26,14 +26,18 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware('checkislogin');
 
 // Data Warga
+Route::middleware(['auth', 'checkrole:Super Admin, Admin'])->group(function () {
 Route::resource('warga', WargaController::class);
+});
 
 Route::middleware(['auth', 'checkrole:Super Admin'])->group(function () {
     Route::resource('user', UserController::class);
 });
 
 // Berita Routes - SINGLE RESOURCE
+Route::middleware(['auth', 'checkrole:Super Admin, Admin'])->group(function () {
 Route::resource('berita', BeritaController::class);
+});
 
 // Route tambahan untuk berita - HANYA SATU KALI
 Route::post('/berita/{berita}/upload-gallery', [BeritaController::class, 'uploadGallery'])
@@ -43,16 +47,26 @@ Route::delete('/berita/{berita}/file/{file}', [BeritaController::class, 'deleteF
     ->name('berita.deleteFile');
 
 // Kategori Berita
+Route::middleware(['auth', 'checkrole:Super Admin, Admin'])->group(function () {
 Route::resource('kategoriberita', KategoriBeritaController::class);
+});
 
 // Logout
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout.get');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+Route::middleware(['auth', 'checkrole:Super Admin, Admin'])->group(function () {
 Route::resource('profildesa', ProfilDesaController::class);
-Route::resource('agenda', AgendaController::class);
+});
 
+Route::middleware(['auth', 'checkrole:Super Admin, Admin'])->group(function () {
+Route::resource('agenda', AgendaController::class);
+});
+
+Route::middleware(['auth', 'checkrole:Super Admin, Admin'])->group(function () {
 Route::resource('galeri', GaleriController::class);
+});
+
 Route::group(['prefix' => 'galeri', 'as' => 'galeri.'], function () {
     // Upload multiple images dari halaman show
     Route::post('{id}/upload-images', [GaleriController::class, 'uploadImages'])->name('uploadImages');

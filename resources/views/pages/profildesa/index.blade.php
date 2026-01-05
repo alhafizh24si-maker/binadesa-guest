@@ -149,15 +149,10 @@
                                                     @endif
                                                 </p>
                                             </div>
-                                            @if($profil->isEmpty())
-                                                <a href="{{ route('profildesa.create') }}" class="btn btn-success">
-                                                    <i class="bi bi-plus-circle me-2"></i>Tambah Profil
-                                                </a>
-                                            @else
-                                                <span class="badge bg-warning text-dark">
-                                                    <i class="bi bi-info-circle me-1"></i>Hanya 1 profil yang aktif
-                                                </span>
-                                            @endif
+                                            <!-- Tombol Tambah Profil Desa -->
+                                            <a href="{{ route('profildesa.create') }}" class="btn btn-success">
+                                                <i class="bi bi-plus-circle me-2"></i>Tambah Profil Desa
+                                            </a>
                                         </div>
                                     </div>
                                 </div>

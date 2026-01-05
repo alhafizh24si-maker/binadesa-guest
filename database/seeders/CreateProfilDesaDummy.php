@@ -132,7 +132,7 @@ class CreateProfilDesaDummy extends Seeder
         DB::table('profil')->truncate();
 
         // Generate 100 data dummy
-        for ($i = 1; $i <= 100; $i++) {
+        for ($i = 1; $i <= 20; $i++) {
             $prov = $provinsi[array_rand($provinsi)];
             $kab = $kabupaten[array_rand($kabupaten)];
             $kec = $kecamatan[array_rand($kecamatan)];

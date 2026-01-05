@@ -19,7 +19,7 @@
                     <div class="row mb-5">
                         <div class="col-md-8 mx-auto text-center">
                             <span class="subtitle text-uppercase mb-3" data-aos="fade-up" data-aos-delay="0">Detail Agenda</span>
-                            <h2 class="mb-3" data-aos="fade-up" data-aos-delay="100">{{ $agenda->judul }}</h2>
+                            <h2 class="mb-3" data-aos="fade-up" data-aos-delay="100">{{ $dataAgenda->judul }}</h2>
                             <p data-aos="fade-up" data-aos-delay="200">Detail lengkap agenda kegiatan.</p>
                         </div>
                     </div>
@@ -27,10 +27,10 @@
                     <div class="row justify-content-center">
                         <div class="col-lg-10">
                             <div class="card border-0 shadow-sm" data-aos="fade-up" data-aos-delay="300">
-                                @if ($agenda->poster_dokumen)
+                                @if ($dataAgenda->poster_dokumen)
                                     <div class="card-img-top" style="max-height: 400px; overflow: hidden;">
-                                        <img src="{{ Storage::url('public/agenda/' . $agenda->poster_dokumen) }}"
-                                            alt="{{ $agenda->judul }}"
+                                        <img src="{{ Storage::url('public/agenda/' . $dataAgenda->poster_dokumen) }}"
+                                            alt="{{ $dataAgenda->judul }}"
                                             style="width: 100%; height: 100%; object-fit: cover;">
                                     </div>
                                 @endif
@@ -43,25 +43,25 @@
                                                 <div class="date-display bg-primary bg-opacity-10 rounded p-3 me-3">
                                                     <div class="text-center">
                                                         <div class="fs-3 fw-bold text-primary">
-                                                            {{ \Carbon\Carbon::parse($agenda->tanggal_mulai)->format('d') }}
+                                                            {{ \Carbon\Carbon::parse($dataAgenda->tanggal_mulai)->format('d') }}
                                                         </div>
                                                         <div class="small text-muted">
-                                                            {{ \Carbon\Carbon::parse($agenda->tanggal_mulai)->format('M Y') }}
+                                                            {{ \Carbon\Carbon::parse($dataAgenda->tanggal_mulai)->format('M Y') }}
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div>
-                                                    <h5 class="mb-1">{{ $agenda->judul }}</h5>
+                                                    <h5 class="mb-1">{{ $dataAgenda->judul }}</h5>
                                                     <p class="text-muted mb-0">
                                                         <i class="bi bi-clock me-1"></i>
-                                                        {{ \Carbon\Carbon::parse($agenda->tanggal_mulai)->format('H:i') }} -
-                                                        {{ \Carbon\Carbon::parse($agenda->tanggal_selesai)->format('H:i') }}
+                                                        {{ \Carbon\Carbon::parse($dataAgenda->tanggal_mulai)->format('H:i') }} -
+                                                        {{ \Carbon\Carbon::parse($dataAgenda->tanggal_selesai)->format('H:i') }}
                                                     </p>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-md-6 text-md-end">
-                                            <span class="badge bg-secondary fs-6">ID: {{ $agenda->agenda_id }}</span>
+                                            <span class="badge bg-secondary fs-6">ID: {{ $dataAgenda->agenda_id }}</span>
                                         </div>
                                     </div>
 
@@ -72,7 +72,7 @@
                                                 <h6 class="text-muted mb-2">
                                                     <i class="bi bi-geo-alt me-2"></i>Lokasi
                                                 </h6>
-                                                <p class="mb-0 fw-medium">{{ $agenda->lokasi }}</p>
+                                                <p class="mb-0 fw-medium">{{ $dataAgenda->lokasi }}</p>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
@@ -80,17 +80,17 @@
                                                 <h6 class="text-muted mb-2">
                                                     <i class="bi bi-building me-2"></i>Penyelenggara
                                                 </h6>
-                                                <p class="mb-0 fw-medium">{{ $agenda->penyelenggara }}</p>
+                                                <p class="mb-0 fw-medium">{{ $dataAgenda->penyelenggara }}</p>
                                             </div>
                                         </div>
                                     </div>
 
                                     <!-- Deskripsi -->
-                                    @if ($agenda->deskripsi)
+                                    @if ($dataAgenda->deskripsi)
                                         <div class="mb-4">
                                             <h5 class="mb-3">Deskripsi Agenda</h5>
                                             <div class="p-3 bg-light rounded border">
-                                                <p class="mb-0" style="white-space: pre-line;">{{ $agenda->deskripsi }}</p>
+                                                <p class="mb-0" style="white-space: pre-line;">{{ $dataAgenda->deskripsi }}</p>
                                             </div>
                                         </div>
                                     @endif
@@ -100,13 +100,13 @@
                                         <div class="col-md-4">
                                             <small class="text-muted">
                                                 <i class="bi bi-calendar-plus me-1"></i> Dibuat:
-                                                {{ \Carbon\Carbon::parse($agenda->created_at)->format('d M Y H:i') }}
+                                                {{ \Carbon\Carbon::parse($dataAgenda->created_at)->format('d M Y H:i') }}
                                             </small>
                                         </div>
                                         <div class="col-md-4">
                                             <small class="text-muted">
                                                 <i class="bi bi-calendar-check me-1"></i> Diupdate:
-                                                {{ \Carbon\Carbon::parse($agenda->updated_at)->format('d M Y H:i') }}
+                                                {{ \Carbon\Carbon::parse($dataAgenda->updated_at)->format('d M Y H:i') }}
                                             </small>
                                         </div>
                                         <div class="col-md-4 text-end">
@@ -114,8 +114,8 @@
                                                 Status:
                                                 @php
                                                     $now = now();
-                                                    $start = \Carbon\Carbon::parse($agenda->tanggal_mulai);
-                                                    $end = \Carbon\Carbon::parse($agenda->tanggal_selesai);
+                                                    $start = \Carbon\Carbon::parse($dataAgenda->tanggal_mulai);
+                                                    $end = \Carbon\Carbon::parse($dataAgenda->tanggal_selesai);
 
                                                     if ($now < $start) {
                                                         $status = 'Akan Datang';
@@ -135,11 +135,11 @@
 
                                     <!-- Action Buttons -->
                                     <div class="d-flex gap-3 mt-5 pt-4 border-top">
-                                        <a href="{{ route('agenda.edit', $agenda->agenda_id) }}"
+                                        <a href="{{ route('agenda.edit', $dataAgenda->agenda_id) }}"
                                            class="btn btn-primary">
                                             <i class="bi bi-pencil me-2"></i>Edit Agenda
                                         </a>
-                                        <form action="{{ route('agenda.destroy', $agenda->agenda_id) }}"
+                                        <form action="{{ route('agenda.destroy', $dataAgenda->agenda_id) }}"
                                               method="POST" class="d-inline">
                                             @csrf
                                             @method('DELETE')
